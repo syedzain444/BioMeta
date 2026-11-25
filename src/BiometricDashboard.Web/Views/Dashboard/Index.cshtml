@@ -1,0 +1,128 @@
+@{
+    ViewBag.ActiveNav = "Dashboard";
+    var displayName = ViewBag.DisplayName as string ?? "User";
+}
+
+<section class="gateos-window gov-win" aria-label="Overview">
+    <div class="gov-tb">
+        <div class="gov-lt" aria-hidden="true"><i></i><i></i><i></i></div>
+        <h2>Overview — <span id="ttl">All devices</span></h2>
+        <span></span>
+    </div>
+    <div class="gov-bar">
+        <div class="gov-seg" id="segDev" role="group" aria-label="Device"></div>
+        <div class="gov-seg" id="segRange" role="group" aria-label="Range">
+            <button type="button" aria-pressed="true" data-v="today">Today</button>
+            <button type="button" aria-pressed="false" data-v="7d">7 days</button>
+            <button type="button" aria-pressed="false" data-v="30d">30 days</button>
+        </div>
+        <div class="gov-spc"></div>
+        <span class="gov-chip" id="dataChip">Loading…</span>
+        <label class="gov-sw">
+            <input type="checkbox" id="live" checked />
+            <span class="gov-trk"></span>
+            Live feed
+        </label>
+        <button type="button" class="gov-btn" id="exp">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M4 21h16"/></svg>
+            Export CSV
+        </button>
+    </div>
+    <div class="gov-ct">
+        <div class="gov-hd">
+            <div>
+                <h1 id="hi">Good morning</h1>
+                <p id="sub"></p>
+            </div>
+        </div>
+        <div class="gov-grid">
+            <div class="gov-k gov-k1">
+                <div class="l">Total punches</div>
+                <div class="v" id="v1">0</div>
+                <span class="dl" id="d1"></span>
+                <div class="ic"><svg viewBox="0 0 24 24"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg></div>
+                <svg class="sk" id="s1" viewBox="0 0 100 34" preserveAspectRatio="none" aria-hidden="true"></svg>
+            </div>
+            <div class="gov-k gov-k2">
+                <div class="l" id="l2">Present today</div>
+                <div class="v" id="v2">0</div>
+                <span class="dl" id="d2"></span>
+                <div class="ic"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M17.5 14.2a5.5 5.5 0 0 1 4 5.3"/></svg></div>
+                <svg class="sk" id="s2" viewBox="0 0 100 34" preserveAspectRatio="none" aria-hidden="true"></svg>
+            </div>
+            <div class="gov-k gov-k3">
+                <div class="l">Late check-ins</div>
+                <div class="v" id="v3">0</div>
+                <span class="dl" id="d3"></span>
+                <div class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+                <svg class="sk" id="s3" viewBox="0 0 100 34" preserveAspectRatio="none" aria-hidden="true"></svg>
+            </div>
+            <div class="gov-k gov-k4">
+                <div class="l">Peak hour</div>
+                <div class="v sm" id="v4">--:--</div>
+                <span class="dl" id="d4"></span>
+                <div class="ic"><svg viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg></div>
+                <svg class="sk" id="s4" viewBox="0 0 100 34" preserveAspectRatio="none" aria-hidden="true"></svg>
+            </div>
+
+            <div class="gov-card gov-tr">
+                <h3>
+                    Attendance trend
+                    <small id="trS"></small>
+                    <span class="lgs">
+                        <button type="button" class="lg" data-s="i" aria-pressed="true"><i style="background:var(--gateos-green-500)"></i>Check-ins</button>
+                        <button type="button" class="lg" data-s="o" aria-pressed="true"><i style="background:var(--gateos-indigo-500)"></i>Check-outs</button>
+                    </span>
+                </h3>
+                <div class="cw" id="cw">
+                    <svg id="trend" viewBox="0 0 720 288" role="img" aria-label="Attendance trend chart"></svg>
+                    <div class="tip" id="tip"></div>
+                </div>
+            </div>
+            <div class="gov-card gov-dv"><h3>Devices<small>click to filter</small></h3><div id="devs"></div></div>
+            <div class="gov-card gov-hm">
+                <h3>Busiest times<small>avg punches, last 4 weeks</small></h3>
+                <div class="hg" id="hg"></div>
+                <div class="hi" id="hInfo">Hover a cell to see details, click to pin it.</div>
+            </div>
+            <div class="gov-card gov-dn">
+                <h3>Punch method</h3>
+                <div class="dw"><svg id="dn" viewBox="0 0 150 150" aria-hidden="true"></svg><div class="dc" id="dc"></div></div>
+                <div class="dl2" id="dl"></div>
+            </div>
+            <div class="gov-card gov-fd">
+                <h3>Live punches<small id="fS">live</small></h3>
+                <ul id="feed" aria-live="polite"></ul>
+            </div>
+        </div>
+    </div>
+    <div class="gov-sbar"><span id="sb1"></span><span class="gov-spc"></span><span id="sbFoot">Portal attendance overview</span></div>
+</section>
+
+<div class="gov-ov" id="ov" hidden>
+    <div class="spl" role="dialog" aria-label="Command search">
+        <input id="sq" placeholder="Type a command… (range, device, live, export)" autocomplete="off" />
+        <ul id="sl"></ul>
+    </div>
+</div>
+
+@section TopbarCenter {
+    <div class="gov-pill on" id="pill"><i aria-hidden="true"></i><span id="pillT">Receiving punches</span></div>
+}
+
+@section TopbarOverviewSearch {
+    <button class="gov-sp" type="button" id="spBtn" aria-label="Open command search">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        Search
+        <kbd>Ctrl K</kbd>
+    </button>
+}
+
+@section Scripts {
+    <script>
+        window.govDisplayName = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(displayName));
+        window.govSyncMode = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.SyncMode ?? "Push"));
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.0/signalr.min.js"></script>
+    <script src="~/js/dashboard-overview.js" asp-append-version="true"></script>
+}

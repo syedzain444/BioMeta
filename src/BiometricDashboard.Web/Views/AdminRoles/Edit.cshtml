@@ -1,0 +1,104 @@
+@model BiometricDashboard.Web.Models.RoleFormViewModel
+
+@{
+
+    ViewData["Title"] = Model.RoleId is null or 0 ? "New role" : "Edit role";
+
+}
+
+@using BiometricDashboard.Web.Models
+@{
+    var editBand = new PortalPageBandViewModel
+    {
+        Eyebrow = "Administration",
+        Title = ViewData["Title"]?.ToString() ?? "Role",
+        IconClass = "bi-shield-lock",
+        Subtitle = "Permissions and module access for this role",
+        PrimaryActionUrl = Url.Action("Index"),
+        PrimaryActionText = "Back to list",
+        PrimaryActionIcon = "bi-arrow-left",
+        Stats =
+        [
+            new() { Label = "Module", Value = "Roles", Meta = "RBAC", IconClass = "bi-key", ColorIndex = 1 },
+            new() { Label = "Access", Value = "Portal", Meta = "modules", IconClass = "bi-grid", ColorIndex = 2 },
+            new() { Label = "Policy", Value = "Claims", Meta = "permissions", IconClass = "bi-shield-check", ColorIndex = 3 },
+            new() { Label = "Mode", Value = "Editor", Meta = "form", IconClass = "bi-sliders", ColorIndex = 4 },
+        ],
+    };
+}
+<div class="portal-page-layout portal-page-layout--scroll">
+    @await Html.PartialAsync("_PortalPageBand", editBand)
+
+<form asp-action="Save" method="post" class="form-panel panel-pro panel-full">
+    @Html.AntiForgeryToken()
+
+    <input type="hidden" asp-for="RoleId" />
+
+    <div class="form-grid">
+
+        <label>
+
+            <span>Role code</span>
+
+            <input asp-for="RoleCode" readonly="@(Model.RoleId is > 0)" />
+
+        </label>
+
+        <label>
+
+            <span>Role name</span>
+
+            <input asp-for="RoleName" />
+
+        </label>
+
+        <label class="span-2">
+
+            <span>Description</span>
+
+            <input asp-for="Description" />
+
+        </label>
+
+        <label class="checkbox-row">
+
+            <input asp-for="IsActive" />
+
+            <span>Active</span>
+
+        </label>
+
+    </div>
+
+    @foreach (var group in Model.PermissionGroups)
+
+    {
+
+        <fieldset class="perm-fieldset">
+
+            <legend>@group.ModuleName</legend>
+
+            @foreach (var p in group.Permissions)
+
+            {
+
+                <label class="checkbox-row">
+
+                    <input type="checkbox" name="SelectedPermissionIds" value="@p.PermissionId"
+
+                           checked="@Model.SelectedPermissionIds.Contains(p.PermissionId)" />
+
+                    <span>@p.PermissionName <code class="tiny">@p.PermissionCode</code></span>
+
+                </label>
+
+            }
+
+        </fieldset>
+
+    }
+
+    <button type="submit" class="btn-primary">Save role</button>
+
+</form>
+</div>

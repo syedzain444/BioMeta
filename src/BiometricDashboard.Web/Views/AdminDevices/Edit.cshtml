@@ -1,0 +1,98 @@
+@model BiometricDashboard.Web.Models.DeviceFormViewModel
+@{
+    ViewData["Title"] = Model.DeviceId is null or 0 ? "Add device" : "Edit device";
+}
+@using BiometricDashboard.Web.Models
+@{
+    var serverPorts = ViewBag.ServerPorts as PortalServerPortsViewModel ?? new PortalServerPortsViewModel();
+    var editBand = new PortalPageBandViewModel
+    {
+        Eyebrow = "Administration",
+        Title = ViewData["Title"]?.ToString() ?? "Device",
+        IconClass = "bi-router",
+        Subtitle = "Terminal connection, push/pull sync, and location",
+        PrimaryActionUrl = Url.Action("Index"),
+        PrimaryActionText = "Back to list",
+        PrimaryActionIcon = "bi-arrow-left",
+        Stats =
+        [
+            new() { Label = "Module", Value = "Devices", Meta = "terminals", IconClass = "bi-hdd-network", ColorIndex = 1 },
+            new() { Label = "HDCP", Value = serverPorts.HdcpPort.ToString(), Meta = "device pull", IconClass = "bi-ethernet", ColorIndex = 2 },
+            new() { Label = "CMD", Value = serverPorts.CmdPort.ToString(), Meta = "portal push", IconClass = "bi-broadcast", ColorIndex = 3 },
+            new() { Label = "HBP", Value = serverPorts.HbpPort.ToString(), Meta = "portal push", IconClass = "bi-heart-pulse", ColorIndex = 4 },
+        ],
+    };
+}
+<div class="portal-page-layout portal-page-layout--scroll">
+    @await Html.PartialAsync("_PortalPageBand", editBand)
+    @await Html.PartialAsync("_PortalServerPorts", serverPorts)
+<form asp-action="Save" method="post" class="form-panel panel-pro panel-full setup-form gateos-device-form">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="DeviceId" />
+    <input type="hidden" asp-for="LastTestSerial" id="LastTestSerial" />
+    <div asp-validation-summary="ModelOnly" class="gateos-val-summary" role="alert"></div>
+    <div class="gateos-form-grid">
+        <label class="gateos-field">
+            <span asp-for="DeviceIp"></span>
+            <input asp-for="DeviceIp" autocomplete="off" placeholder="e.g. 10.100.23.125" />
+            <small class="gateos-field-hint">Gate / terminal address on your LAN</small>
+        </label>
+        <label class="gateos-field">
+            <span asp-for="DevicePort"></span>
+            <input asp-for="DevicePort" type="number" min="1" max="65535" />
+            <small class="gateos-field-hint">Usually <strong>9922</strong> — pull &amp; Test connection. Not @serverPorts.CmdPort / @serverPorts.HbpPort (those are on the portal PC for push).</small>
+        </label>
+        <label class="gateos-field">
+            <span>Device admin ID</span>
+            <input asp-for="AdminId" autocomplete="off" />
+        </label>
+        <label class="gateos-field">
+            <span>Device admin password @(Model.DeviceId is > 0 ? "(blank = keep)" : "")</span>
+            <input asp-for="AdminPassword" type="password" autocomplete="new-password" />
+        </label>
+        <label class="gateos-field">
+            <span>Device name / alias</span>
+            <input asp-for="DeviceName" />
+        </label>
+        <label class="gateos-field">
+            <span>Location</span>
+            <input asp-for="DeviceLocation" />
+        </label>
+    </div>
+    <div class="gateos-form-switches" role="group" aria-label="Device flags">
+        <label class="gateos-sw-card">
+            <input asp-for="IsActive" />
+            <span class="gateos-trk" aria-hidden="true"></span>
+            <span class="gateos-sw-copy">
+                <strong>Active</strong>
+                <small>Include in sync pool</small>
+            </span>
+        </label>
+        <label class="gateos-sw-card">
+            <input asp-for="IsPrimary" />
+            <span class="gateos-trk" aria-hidden="true"></span>
+            <span class="gateos-sw-copy">
+                <strong>Primary</strong>
+                <small>Default in device selector</small>
+            </span>
+        </label>
+    </div>
+    <div id="deviceEditTestPanel" class="gateos-edit-test-panel" hidden aria-live="polite"></div>
+    <div class="gateos-form-actions gateos-form-actions--split">
+        <button type="button" class="btn-ghost gateos-btn-test-draft" id="btnDeviceTestDraft">
+            <i class="bi bi-plug" aria-hidden="true"></i>
+            Test connection
+        </button>
+        <button type="submit" class="btn-primary gateos-btn-save">
+            <i class="bi bi-check-lg" aria-hidden="true"></i>
+            Save device
+        </button>
+    </div>
+    <p class="gateos-form-footnote tiny">Save is instant (database only). Test runs in the background and does not block save — run test first if you want serial/status before saving.</p>
+</form>
+</div>
+
+@section Scripts {
+    <script>window.adminDevicesTestDraftUrl = "@Url.Content("~/Admin/Devices/TestDraft")";</script>
+    <script src="~/js/admin-devices-edit.js" asp-append-version="true"></script>
+}

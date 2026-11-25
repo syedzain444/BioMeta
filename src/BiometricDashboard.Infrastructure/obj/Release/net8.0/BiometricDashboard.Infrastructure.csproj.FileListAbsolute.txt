@@ -1,0 +1,15 @@
+d:\Zain BTK Projects\Biometric\src\BiometricDashboard.Infrastructure\bin\Release\net8.0\BiometricDashboard.Infrastructure.deps.json
+d:\Zain BTK Projects\Biometric\src\BiometricDashboard.Infrastructure\bin\Release\net8.0\BiometricDashboard.Infrastructure.dll
+d:\Zain BTK Projects\Biometric\src\BiometricDashboard.Infrastructure\bin\Release\net8.0\BiometricDashboard.Infrastructure.pdb
+d:\Zain BTK Projects\Biometric\src\BiometricDashboard.Infrastructure\bin\Release\net8.0\BiometricDashboard.Core.dll
+d:\Zain BTK Projects\Biometric\src\BiometricDashboard.Infrastructure\bin\Release\net8.0\BiometricDashboard.Core.pdb
+d:\Zain BTK Projects\Biometric\src\BiometricDashboard.Infrastructure\obj\Release\net8.0\BiometricDashboard.Infrastructure.csproj.AssemblyReference.cache
+d:\Zain BTK Projects\Biometric\src\BiometricDashboard.Infrastructure\obj\Release\net8.0\BiometricDashboard.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+d:\Zain BTK Projects\Biometric\src\BiometricDashboard.Infrastructure\obj\Release\net8.0\BiometricDashboard.Infrastructure.AssemblyInfoInputs.cache
+d:\Zain BTK Projects\Biometric\src\BiometricDashboard.Infrastructure\obj\Release\net8.0\BiometricDashboard.Infrastructure.AssemblyInfo.cs
+d:\Zain BTK Projects\Biometric\src\BiometricDashboard.Infrastructure\obj\Release\net8.0\BiometricDashboard.Infrastructure.csproj.CoreCompileInputs.cache
+d:\Zain BTK Projects\Biometric\src\BiometricDashboard.Infrastructure\obj\Release\net8.0\Biometri.C153E2C4.Up2Date
+d:\Zain BTK Projects\Biometric\src\BiometricDashboard.Infrastructure\obj\Release\net8.0\BiometricDashboard.Infrastructure.dll
+d:\Zain BTK Projects\Biometric\src\BiometricDashboard.Infrastructure\obj\Release\net8.0\refint\BiometricDashboard.Infrastructure.dll
+d:\Zain BTK Projects\Biometric\src\BiometricDashboard.Infrastructure\obj\Release\net8.0\BiometricDashboard.Infrastructure.pdb
+d:\Zain BTK Projects\Biometric\src\BiometricDashboard.Infrastructure\obj\Release\net8.0\ref\BiometricDashboard.Infrastructure.dll

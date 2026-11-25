@@ -1,0 +1,138 @@
+@model BiometricDashboard.Web.Models.DeviceFormViewModel
+@using BiometricDashboard.Web.Models
+@{
+    var serverPorts = ViewBag.ServerPorts as PortalServerPortsViewModel ?? new PortalServerPortsViewModel();
+    var isEdit = Model.DeviceId is > 0;
+    var verb = isEdit ? "Edit" : "Register";
+    var toolTitle = isEdit ? "Edit terminal" : "Register terminal";
+    var displayName = string.IsNullOrWhiteSpace(Model.DeviceName) ? "Terminal" : Model.DeviceName;
+    var displayIp = string.IsNullOrWhiteSpace(Model.DeviceIp) ? "—" : Model.DeviceIp;
+}
+<form class="dmac-modal" id="deviceModalForm" method="post" asp-controller="AdminDevices" asp-action="Save" novalidate
+      role="dialog" aria-label="@toolTitle">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="DeviceId" />
+    <input type="hidden" asp-for="LastTestSerial" id="LastTestSerial" />
+
+    <svg class="dmac-sprite" width="0" height="0" aria-hidden="true">
+        <defs>
+            <symbol id="dmac-i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 010 18M12 3a14 14 0 000 18"/></symbol>
+            <symbol id="dmac-i-plug" viewBox="0 0 24 24"><path d="M9 2v6M15 2v6M6 8h12v4a6 6 0 01-12 0zM12 18v4"/></symbol>
+            <symbol id="dmac-i-id" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><circle cx="9" cy="11" r="2"/><path d="M6 16c.6-1.6 5.4-1.6 6 0M15 10h3M15 14h3"/></symbol>
+            <symbol id="dmac-i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2.5"/><path d="M8 11V8a4 4 0 018 0v3"/></symbol>
+            <symbol id="dmac-i-tag" viewBox="0 0 24 24"><path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="8.5" r="1"/></symbol>
+            <symbol id="dmac-i-pin" viewBox="0 0 24 24"><path d="M12 21s7-6 7-11a7 7 0 10-14 0c0 5 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></symbol>
+            <symbol id="dmac-i-sync" viewBox="0 0 24 24"><path d="M20 12a8 8 0 01-14 5.3M4 12a8 8 0 0114-5.3M18 3v4h-4M6 21v-4h4"/></symbol>
+            <symbol id="dmac-i-star" viewBox="0 0 24 24"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.5 2.9 1-6.1L3.2 9.5l6.1-.9z"/></symbol>
+            <symbol id="dmac-i-eye" viewBox="0 0 24 24"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+            <symbol id="dmac-i-eyeoff" viewBox="0 0 24 24"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12zM4 4l16 16"/><circle cx="12" cy="12" r="3"/></symbol>
+            <symbol id="dmac-i-term" viewBox="0 0 24 24"><path d="M4 17l6-5-6-5M12 19h8"/></symbol>
+            <symbol id="dmac-i-pulse" viewBox="0 0 24 24"><path d="M3 12h4l3-8 4 16 3-8h4"/></symbol>
+            <symbol id="dmac-i-down" viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></symbol>
+            <symbol id="dmac-i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+            <symbol id="dmac-i-ok" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+            <symbol id="dmac-i-face" viewBox="0 0 24 24"><path d="M12 11c0 3-.5 5-1.6 7M8 18.5c1.2-2 1.7-4.2 1.7-6.5a2.3 2.3 0 014.6 0c0 1.4-.1 2.7-.4 4M5.5 15c.4-1 .6-2 .6-3a5.9 5.9 0 0111.8-.4M4.5 8.5A8.5 8.5 0 0120 11c0 1.3-.1 2.5-.5 3.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
+        </defs>
+    </svg>
+
+    <aside class="dmac-side">
+        <div class="dmac-dots">
+            <button type="button" id="adevMacClose" aria-label="Close"></button>
+            <button type="button" tabindex="-1" aria-hidden="true"></button>
+            <button type="button" tabindex="-1" aria-hidden="true"></button>
+        </div>
+        <div class="dmac-ico">
+            <svg viewBox="0 0 24 24"><use href="#dmac-i-face"></use></svg>
+        </div>
+        <div class="dmac-brand">BIOMETA</div>
+        <h2><span>@verb</span> <b id="adevMacName">@displayName</b></h2>
+        <div class="dmac-sub" id="adevMacIp">@displayIp</div>
+        <div class="dmac-ports">
+            <div class="dmac-pt">
+                <b><svg><use href="#dmac-i-term"/></svg>CMD</b>
+                <span>@serverPorts.CmdPort<small>push</small></span>
+            </div>
+            <div class="dmac-pt">
+                <b><svg><use href="#dmac-i-pulse"/></svg>HBP</b>
+                <span>@serverPorts.HbpPort<small>push</small></span>
+            </div>
+            <div class="dmac-pt dmac-pt-sel">
+                <b><svg><use href="#dmac-i-down"/></svg>HDCP</b>
+                <span id="adevMacHdcp">@Model.DevicePort<small>pull · test</small></span>
+            </div>
+        </div>
+        <p class="dmac-note">Test uses the terminal IP + HDCP port on your LAN.</p>
+    </aside>
+
+    <div class="dmac-main">
+        <div class="dmac-tool">@toolTitle</div>
+        <div class="dmac-scroll">
+            <div class="dmac-val" id="deviceModalValSummary" hidden role="alert"></div>
+
+            <div class="dmac-cap">Connection</div>
+            <div class="dmac-grp">
+                <div class="dmac-rw" data-k="ip">
+                    <span class="dmac-ri" style="background:#3b82f6"><svg><use href="#dmac-i-globe"/></svg></span>
+                    <label asp-for="DeviceIp">Terminal IP</label>
+                    <input asp-for="DeviceIp" autocomplete="off" inputmode="decimal" placeholder="10.100.17.203" />
+                </div>
+                <div class="dmac-rw" data-k="port">
+                    <span class="dmac-ri" style="background:#f59e0b"><svg><use href="#dmac-i-plug"/></svg></span>
+                    <label asp-for="DevicePort">HDCP port</label>
+                    <input asp-for="DevicePort" type="number" min="1" max="65535" inputmode="numeric" />
+                </div>
+                <div class="dmac-rw">
+                    <span class="dmac-ri" style="background:#6366f1"><svg><use href="#dmac-i-id"/></svg></span>
+                    <label asp-for="AdminId">Device admin ID</label>
+                    <input asp-for="AdminId" autocomplete="off" inputmode="numeric" />
+                </div>
+                <div class="dmac-rw">
+                    <span class="dmac-ri" style="background:#64748b"><svg><use href="#dmac-i-lock"/></svg></span>
+                    <label asp-for="AdminPassword">
+                        Admin password
+                        <small>@(isEdit ? "Blank = keep current" : "Required for new device")</small>
+                    </label>
+                    <input asp-for="AdminPassword" type="password" autocomplete="new-password" placeholder="@(isEdit ? "Unchanged" : "")" />
+                    <button class="dmac-eye" id="adevMacEye" type="button" aria-label="Show password"><svg><use href="#dmac-i-eye"/></svg></button>
+                </div>
+            </div>
+
+            <div class="dmac-cap">Identity</div>
+            <div class="dmac-grp">
+                <div class="dmac-rw">
+                    <span class="dmac-ri" style="background:#14b8a6"><svg><use href="#dmac-i-tag"/></svg></span>
+                    <label asp-for="DeviceName">Display name</label>
+                    <input asp-for="DeviceName" placeholder="Device 3" />
+                </div>
+                <div class="dmac-rw">
+                    <span class="dmac-ri" style="background:#ef4444"><svg><use href="#dmac-i-pin"/></svg></span>
+                    <label asp-for="DeviceLocation">Location</label>
+                    <input asp-for="DeviceLocation" placeholder="Main Gate" />
+                </div>
+            </div>
+
+            <div class="dmac-cap">Options</div>
+            <div class="dmac-grp">
+                <div class="dmac-rw">
+                    <span class="dmac-ri" style="background:#10b981"><svg><use href="#dmac-i-sync"/></svg></span>
+                    <div class="dmac-l">Active<small>Sync pool</small></div>
+                    <input asp-for="IsActive" type="checkbox" class="dmac-sw-inp" />
+                    <button type="button" class="dmac-sw" id="swActive" role="switch" aria-checked="@(Model.IsActive ? "true" : "false")" aria-label="Active"></button>
+                </div>
+                <div class="dmac-rw">
+                    <span class="dmac-ri" style="background:#f5a524"><svg><use href="#dmac-i-star"/></svg></span>
+                    <div class="dmac-l">Primary<small>Default in menu</small></div>
+                    <input asp-for="IsPrimary" type="checkbox" class="dmac-sw-inp" />
+                    <button type="button" class="dmac-sw" id="swPrimary" role="switch" aria-checked="@(Model.IsPrimary ? "true" : "false")" aria-label="Primary"></button>
+                </div>
+            </div>
+        </div>
+        <footer class="dmac-foot">
+            <button type="button" class="dmac-b" id="adevFormCancel"><svg><use href="#dmac-i-x"/></svg>Cancel</button>
+            <span class="dmac-sp"></span>
+            <span class="dmac-res" id="adevCrudTestRes"></span>
+            <button type="button" class="dmac-b" id="btnDeviceTestDraft"><svg><use href="#dmac-i-pulse"/></svg><span>Test connection</span></button>
+            <button type="submit" class="dmac-b dmac-p" id="adevFormSave"><svg><use href="#dmac-i-ok"/></svg><span id="adevFormSaveLabel">@(isEdit ? "Save changes" : "Add device")</span></button>
+        </footer>
+    </div>
+</form>

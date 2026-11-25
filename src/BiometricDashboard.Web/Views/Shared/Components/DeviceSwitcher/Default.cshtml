@@ -1,0 +1,18 @@
+@model BiometricDashboard.Web.Models.DeviceSwitcherViewModel
+@if (Model.Devices.Count > 0)
+{
+    <form asp-controller="DeviceSwitch" asp-action="Select" method="post" class="device-switcher device-switcher-pro">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="returnUrl" value="@Context.Request.Path" />
+        <span class="device-switcher-label"><i class="bi bi-hdd-network"></i> Active device</span>
+        <label class="device-switcher-field">
+            <select name="deviceId" onchange="this.form.submit()" aria-label="Active device">
+                @foreach (var d in Model.Devices)
+                {
+                    <option value="@d.DeviceId" selected="@(Model.SelectedDeviceId == d.DeviceId)">@d.Label</option>
+                }
+            </select>
+            <i class="bi bi-chevron-right device-switcher-chevron" aria-hidden="true"></i>
+        </label>
+    </form>
+}

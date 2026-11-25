@@ -1,0 +1,32 @@
+-- Fix: grant device_enroll_sync.view to roles that can use other device modules.
+-- Run after 014. Then sign out and sign in so cookie permissions refresh.
+
+INSERT INTO SEC_ROLE_PERMISSION (ROLE_ID, PERMISSION_ID, CREATED_BY)
+SELECT DISTINCT rp.ROLE_ID, p_new.PERMISSION_ID, 1
+FROM SEC_ROLE_PERMISSION rp
+JOIN SEC_PERMISSION p_src ON p_src.PERMISSION_ID = rp.PERMISSION_ID
+  AND p_src.PERMISSION_CODE IN ('device_users.view', 'devices.view', 'device_enroll_hub.view', 'devices.manage')
+  AND p_src.DELETED_AT IS NULL
+CROSS JOIN SEC_PERMISSION p_new
+WHERE p_new.PERMISSION_CODE = 'device_enroll_sync.view' AND p_new.DELETED_AT IS NULL
+  AND rp.DELETED_AT IS NULL
+  AND NOT EXISTS (
+    SELECT 1 FROM SEC_ROLE_PERMISSION x
+    WHERE x.ROLE_ID = rp.ROLE_ID AND x.PERMISSION_ID = p_new.PERMISSION_ID AND x.DELETED_AT IS NULL
+  );
+
+INSERT INTO SEC_ROLE_PERMISSION (ROLE_ID, PERMISSION_ID, CREATED_BY)
+SELECT DISTINCT rp.ROLE_ID, p_new.PERMISSION_ID, 1
+FROM SEC_ROLE_PERMISSION rp
+JOIN SEC_PERMISSION p_src ON p_src.PERMISSION_ID = rp.PERMISSION_ID
+  AND p_src.PERMISSION_CODE IN ('devices.manage', 'device_enroll_hub.save')
+  AND p_src.DELETED_AT IS NULL
+CROSS JOIN SEC_PERMISSION p_new
+WHERE p_new.PERMISSION_CODE = 'device_enroll_sync.run' AND p_new.DELETED_AT IS NULL
+  AND rp.DELETED_AT IS NULL
+  AND NOT EXISTS (
+    SELECT 1 FROM SEC_ROLE_PERMISSION x
+    WHERE x.ROLE_ID = rp.ROLE_ID AND x.PERMISSION_ID = p_new.PERMISSION_ID AND x.DELETED_AT IS NULL
+  );
+
+COMMIT;

@@ -1,0 +1,345 @@
+/* Live Attendance dashboard — markup/CSS aligned with GateOS HTML mock */
+
+.gateos-page-dashboard .gateos-panel {
+  flex: 1;
+  min-height: 0;
+}
+
+.gateos-page-dashboard .gateos-ph {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.gateos-page-dashboard .gateos-ph h3 {
+  font-family: var(--gateos-display);
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+}
+
+.gateos-page-dashboard .gateos-dots {
+  display: flex;
+  gap: 5px;
+}
+
+.gateos-page-dashboard .gateos-tools {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.gateos-page-dashboard .gateos-search {
+  position: relative;
+}
+
+.gateos-page-dashboard .gateos-search svg {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  color: #94a3b8;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+}
+
+.gateos-page-dashboard .gateos-search input,
+.gateos-page-dashboard .gateos-btn,
+.gateos-page-dashboard .gateos-foot .gateos-sel {
+  height: 40px;
+  font: inherit;
+  font-size: 13px;
+  color: var(--gateos-ink);
+  border: 1.5px solid var(--gateos-line);
+  background: var(--gateos-field);
+  border-radius: 13px;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+}
+
+.gateos-page-dashboard .gateos-search input {
+  width: 250px;
+  padding: 0 14px 0 40px;
+}
+
+.gateos-page-dashboard .gateos-search input::placeholder {
+  color: #94a3b8;
+}
+
+.gateos-page-dashboard .gateos-search input:focus,
+.gateos-page-dashboard .gateos-foot .gateos-sel:focus {
+  background: #fff;
+  border-color: var(--gateos-green-500);
+  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.14);
+}
+
+.gateos-page-dashboard .gateos-btn {
+  padding: 0 15px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  color: #334155;
+  cursor: pointer;
+}
+
+.gateos-page-dashboard .gateos-btn svg {
+  width: 16px;
+  height: 16px;
+  color: var(--gateos-teal-500);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+}
+
+.gateos-page-dashboard .gateos-btn:hover {
+  background: #e9eff7;
+}
+
+.gateos-page-dashboard .gateos-btn.is-off {
+  opacity: 0.72;
+}
+
+.gateos-page-dashboard .gateos-table-wrap {
+  overflow-x: auto;
+  border-radius: 16px;
+  border: 1px solid var(--gateos-line);
+  min-height: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.gateos-page-dashboard .gateos-punch-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 820px;
+  font-size: 13px;
+}
+
+.gateos-page-dashboard .gateos-punch-table thead th {
+  text-align: left;
+  padding: 13px 16px;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: #e2e8f0;
+  background: linear-gradient(135deg, var(--gateos-navy-900), var(--gateos-navy-800));
+  border: none;
+}
+
+.gateos-page-dashboard .gateos-punch-table thead th::after {
+  content: "↕";
+  margin-left: 8px;
+  opacity: 0.4;
+  font-size: 10px;
+}
+
+.gateos-page-dashboard .gateos-punch-table tbody td {
+  padding: 12px 16px;
+  border-top: 1px solid var(--gateos-line);
+  white-space: nowrap;
+  background: #fff;
+  color: var(--gateos-ink);
+}
+
+.gateos-page-dashboard .gateos-punch-table tbody tr:nth-child(even) td {
+  background: #fafcff;
+}
+
+.gateos-page-dashboard .gateos-punch-table tbody tr:hover td {
+  background: #f1f7ff;
+}
+
+.gateos-page-dashboard .gateos-punch-table th.col-dot,
+.gateos-page-dashboard .gateos-punch-table td.col-dot,
+.gateos-page-dashboard .gateos-punch-table th.col-actions,
+.gateos-page-dashboard .gateos-punch-table td.col-actions {
+  display: none !important;
+  width: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+}
+
+.gateos-page-dashboard .gateos-punch-table .badge,
+.gateos-page-dashboard .gateos-punch-table .source-pill {
+  display: inline-flex;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 600;
+  background: #d1fae5;
+  color: #047857;
+}
+
+.gateos-page-dashboard .gateos-punch-table code.emp-id {
+  font-family: ui-monospace, Consolas, monospace;
+  font-size: 12px;
+  background: transparent;
+  color: inherit;
+}
+
+.gateos-page-dashboard .portal-dt-host .dataTables_wrapper {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+}
+
+.gateos-page-dashboard .portal-dt-host .portal-dt-scroll {
+  overflow: auto;
+  flex: 1;
+  min-height: 120px;
+}
+
+.gateos-page-dashboard .portal-dt-host .dt-toolbar,
+.gateos-page-dashboard .portal-dt-host .dataTables_filter,
+.gateos-page-dashboard .portal-dt-host .dataTables_length label > span:not(.gateos-show-label) {
+  display: none !important;
+}
+
+.gateos-page-dashboard .portal-dt-host .dt-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  font-size: 12.5px;
+  color: var(--gateos-muted);
+  padding: 14px 4px 0;
+  border: none;
+  background: transparent;
+}
+
+.gateos-page-dashboard .portal-dt-host .dataTables_length {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  order: 1;
+}
+
+.gateos-page-dashboard .portal-dt-host .dataTables_length label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--gateos-muted);
+}
+
+.gateos-page-dashboard .portal-dt-host .dataTables_length label::before {
+  content: "Show";
+  font-size: 12.5px;
+  color: var(--gateos-muted);
+}
+
+.gateos-page-dashboard .portal-dt-host .dataTables_length select {
+  height: 36px;
+  padding: 0 12px;
+  font: inherit;
+  font-size: 13px;
+  border: 1.5px solid var(--gateos-line);
+  background: var(--gateos-field);
+  border-radius: 13px;
+  color: var(--gateos-ink);
+}
+
+.gateos-page-dashboard .portal-dt-host .dataTables_info {
+  order: 2;
+  padding: 0;
+  font-size: 12.5px;
+  color: var(--gateos-muted);
+}
+
+.gateos-page-dashboard .portal-dt-host .dataTables_paginate {
+  order: 3;
+  display: flex;
+  gap: 8px;
+  margin: 0;
+}
+
+.gateos-page-dashboard .portal-dt-host .dataTables_paginate .paginate_button {
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  padding: 0 !important;
+  margin: 0 !important;
+  border-radius: 11px !important;
+  border: 1.5px solid var(--gateos-line) !important;
+  background: #fff !important;
+  color: #64748b !important;
+  display: grid !important;
+  place-items: center;
+  line-height: 1;
+  box-shadow: none !important;
+}
+
+.gateos-page-dashboard .portal-dt-host .dataTables_paginate .paginate_button.previous,
+.gateos-page-dashboard .portal-dt-host .dataTables_paginate .paginate_button.next {
+  font-size: 0;
+}
+
+.gateos-page-dashboard .portal-dt-host .dataTables_paginate .paginate_button.previous::after {
+  content: "";
+  width: 15px;
+  height: 15px;
+  border: none;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='%2364748b' stroke-width='2' viewBox='0 0 24 24'%3E%3Cpath d='M15 6l-6 6 6 6'/%3E%3C/svg%3E") center/contain no-repeat;
+}
+
+.gateos-page-dashboard .portal-dt-host .dataTables_paginate .paginate_button.next::after {
+  content: "";
+  width: 15px;
+  height: 15px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='%2364748b' stroke-width='2' viewBox='0 0 24 24'%3E%3Cpath d='M9 6l6 6-6 6'/%3E%3C/svg%3E") center/contain no-repeat;
+}
+
+.gateos-page-dashboard .portal-dt-host .dataTables_paginate .paginate_button.disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.gateos-page-dashboard .portal-dt-host .dataTables_paginate .paginate_button:not(.previous):not(.next) {
+  display: none !important;
+}
+
+.gateos-page-dashboard .portal-dt-host .dataTables_empty {
+  text-align: center !important;
+  padding: 40px 16px !important;
+  color: var(--gateos-muted) !important;
+  background: #fff !important;
+}
+
+.gateos-page-dashboard .portal-dt-host .dataTables_empty::before {
+  content: "";
+  display: block;
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 12px;
+  border-radius: 50%;
+  border: 1.5px dashed #99e6dc;
+  background: radial-gradient(circle, #e6f7f4, #fff 75%);
+}
+
+@media (max-width: 700px) {
+  .gateos-page-dashboard .gateos-search input {
+    width: 100%;
+  }
+  .gateos-page-dashboard .gateos-search,
+  .gateos-page-dashboard .gateos-tools {
+    width: 100%;
+  }
+}

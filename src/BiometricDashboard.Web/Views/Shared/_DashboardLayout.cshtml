@@ -1,0 +1,157 @@
+@{
+    var showWelcome = Context.Session.GetString("PortalWelcome") == "1";
+    if (showWelcome)
+        Context.Session.Remove("PortalWelcome");
+
+    var displayName = Context.Session.GetString("DisplayName") ?? User.Identity?.Name ?? "User";
+    var gateosDashboard = ViewData["GateosDashboard"] as bool? == true;
+    var gateosOverview = ViewData["GateosOverview"] as bool? == true;
+    var gateosEnrolled = ViewData["GateosEnrolledUsers"] as bool? == true;
+    var gateosEmployeePhotos = ViewData["GateosEmployeePhotos"] as bool? == true;
+    var gateosAdminDevices = ViewData["GateosAdminDevices"] as bool? == true;
+    var gateosEnrollmentHub = ViewData["GateosEnrollmentHub"] as bool? == true;
+    var gateosEnrollmentSync = ViewData["GateosEnrollmentSync"] as bool? == true;
+    var gateosFullWindow = gateosDashboard || gateosEnrolled || gateosEmployeePhotos || gateosAdminDevices || gateosEnrollmentHub || gateosEnrollmentSync;
+    var pageTitle = ViewData["Title"] as string ?? "Portal";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GateOS — @ViewData["Title"]</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.8/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" href="~/css/dashboard.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/portal-os.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/portal-dock-nav.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/portal-topbar-glass.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/portal-page-band.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/portal-actions.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/portal-boot-screen.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/portal-gateos-shell.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/portal-gateos-page-hero.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/portal-gateos-grids.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/portal-datetime.css" asp-append-version="true" />
+    @if (gateosDashboard)
+    {
+        <link rel="stylesheet" href="~/css/portal-gateos-dashboard.css" asp-append-version="true" />
+    }
+    @if (gateosEnrolled)
+    {
+        <link rel="stylesheet" href="~/css/portal-gateos-enrolled-users.css" asp-append-version="true" />
+    }
+    @if (gateosEmployeePhotos)
+    {
+        <link rel="stylesheet" href="~/css/portal-gateos-employee-photos.css" asp-append-version="true" />
+    }
+    @if (gateosOverview)
+    {
+        <link rel="stylesheet" href="~/css/portal-gateos-overview.css" asp-append-version="true" />
+    }
+    @if (gateosAdminDevices)
+    {
+        <link rel="stylesheet" href="~/css/portal-gateos-admin-devices.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/css/portal-gateos-device-crud-modal.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/css/portal-gateos-device-test-modal.css" asp-append-version="true" />
+    }
+    @if (gateosEnrollmentHub)
+    {
+        <link rel="stylesheet" href="~/css/portal-gateos-enrollment-hub.css" asp-append-version="true" />
+    }
+    @if (gateosEnrollmentSync)
+    {
+        <link rel="stylesheet" href="~/css/portal-gateos-enrollment-sync.css" asp-append-version="true" />
+    }
+</head>
+<body class="portal-body gateos-portal@(gateosDashboard && !gateosOverview ? " gateos-page-dashboard" : "")@(gateosOverview ? " gateos-page-overview" : "")@(gateosEnrolled ? " gateos-page-enrolled" : "")@(gateosEmployeePhotos ? " gateos-page-employee-photos" : "")@(gateosAdminDevices ? " gateos-page-admin-devices" : "")@(gateosEnrollmentHub ? " gateos-page-enrollment-hub" : "")@(gateosEnrollmentSync ? " gateos-page-enrollment-sync" : "")" data-welcome="@(showWelcome ? "true" : "false")">
+    @await Html.PartialAsync("_PortalOverlays")
+
+    <div class="gateos-wallpaper" aria-hidden="true">
+        <div class="orb a"></div>
+        <div class="orb b"></div>
+        <div class="orb c"></div>
+        <div class="orb d"></div>
+    </div>
+
+    <div class="gateos-os">
+        <header class="gateos-menubar" role="banner">
+            <div class="gateos-mb-l">
+                <span class="gateos-logo" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><path d="M12 10a2 2 0 0 0-2 2c0 1.02-.1 2.51-.26 4"/><path d="M14 13.12c0 2.38 0 6.38-1 8.88"/><path d="M17.29 21.02c.12-.6.43-2.3.5-3.02"/><path d="M2 12a10 10 0 0 1 18-6"/><path d="M21.8 16c.2-2 .131-5.354 0-6"/><path d="M5 19.5C5.5 18 6 15 6 12a6 6 0 0 1 .34-2"/><path d="M8.65 22c.21-.66.45-1.32.57-2"/><path d="M9 6.8a6 6 0 0 1 9 5.2v2"/></svg>
+                </span>
+                <b>GateOS</b>
+                <span class="gateos-mi app">@(gateosOverview ? "Overview" : pageTitle)</span>
+                <button class="gateos-mi" type="button" tabindex="-1">File</button>
+                <button class="gateos-mi" type="button" tabindex="-1">View</button>
+                <button class="gateos-mi" type="button" tabindex="-1">Devices</button>
+                <button class="gateos-mi" type="button" tabindex="-1">Help</button>
+            </div>
+            <div class="gateos-mb-c">
+                @await RenderSectionAsync("TopbarCenter", required: false)
+            </div>
+            <div class="gateos-mb-r">
+                @if (!gateosOverview)
+                {
+                    <div class="gateos-tray-dev-host">
+                        @await Component.InvokeAsync("DeviceMenu")
+                    </div>
+                }
+                @await RenderSectionAsync("TopbarOverviewSearch", required: false)
+                @await Html.PartialAsync("_GateosUserTray", displayName)
+                <div class="gateos-clock" aria-live="polite">
+                    <span id="gateosDate"></span>
+                    <b id="gateosTime">00:00:00</b>
+                </div>
+            </div>
+        </header>
+
+        <main class="gateos-desktop">
+            @if (TempData["Success"] is string ok)
+            {
+                <div class="alert-banner success">@ok</div>
+            }
+            @if (TempData["Error"] is string err)
+            {
+                <div class="alert-banner error">@err</div>
+            }
+
+            @if (gateosFullWindow)
+            {
+                @RenderBody()
+            }
+            else
+            {
+                <section class="gateos-window" aria-label="@pageTitle">
+                    <div class="gateos-titlebar">
+                        <div class="gateos-lights" aria-hidden="true"><i></i><i></i><i></i></div>
+                        <h2>@pageTitle</h2>
+                        <span></span>
+                    </div>
+                    <div class="gateos-content">
+                        @RenderBody()
+                    </div>
+                </section>
+            }
+        </main>
+
+        <aside class="gateos-dock portal-sidebar portal-dock-sidebar" aria-label="Applications">
+            @await Component.InvokeAsync("PortalNav")
+            @await Html.PartialAsync("_GateosDockSys")
+        </aside>
+    </div>
+
+    <script src="~/js/portal-ui.js" asp-append-version="true"></script>
+    <script src="~/js/portal-clock.js" asp-append-version="true"></script>
+    <script src="~/js/mac-device-menu.js" asp-append-version="true"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
+    <script src="~/js/portal-datetime.js" asp-append-version="true"></script>
+    <script src="~/js/portal-datatables.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

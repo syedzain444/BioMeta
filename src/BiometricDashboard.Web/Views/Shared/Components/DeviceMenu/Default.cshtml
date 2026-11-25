@@ -1,0 +1,53 @@
+@model BiometricDashboard.Web.Models.DeviceMenuViewModel
+@if (Model.Devices.Count == 0)
+{
+    <div class="mac-device-menu mac-device-menu--empty" title="Register a device in Admin">
+        <span class="mac-device-icon"><i class="bi bi-hdd-network"></i></span>
+        <span class="mac-device-copy">
+            <span class="mac-device-name">No device</span>
+            <span class="mac-device-status mac-device-status--off"><span class="mac-device-dot"></span> Inactive</span>
+        </span>
+    </div>
+}
+else
+{
+    <div class="mac-device-menu" id="macDeviceMenu">
+        <button type="button" class="mac-device-trigger" id="macDeviceMenuBtn" aria-haspopup="listbox" aria-expanded="false">
+            <span class="mac-device-icon"><i class="bi bi-display"></i></span>
+            <span class="mac-device-copy">
+                <span class="mac-device-name">@Model.DeviceName</span>
+                @if (!string.IsNullOrEmpty(Model.DeviceIp))
+                {
+                    <span class="mac-device-ip">@Model.DeviceIp</span>
+                }
+                <span class="mac-device-status @(Model.IsLive ? "mac-device-status--live" : "mac-device-status--off")">
+                    <span class="mac-device-dot" aria-hidden="true"></span>
+                    @(Model.IsLive ? "Live" : "Inactive")
+                </span>
+            </span>
+            <i class="bi bi-chevron-down mac-device-chevron" aria-hidden="true"></i>
+        </button>
+        <div class="mac-device-panel" id="macDeviceMenuPanel" hidden role="listbox">
+            <p class="mac-device-panel-title">Active terminals</p>
+            @foreach (var d in Model.Devices)
+            {
+                <form asp-controller="DeviceSwitch" asp-action="Select" method="post" class="mac-device-option @(d.IsSelected ? "is-selected" : "")">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="returnUrl" value="@Context.Request.Path" />
+                    <input type="hidden" name="deviceId" value="@d.DeviceId" />
+                    <button type="submit" class="mac-device-option-btn" role="option" aria-selected="@d.IsSelected">
+                        <span class="mac-device-option-icon"><i class="bi bi-hdd-network"></i></span>
+                        <span class="mac-device-option-text">
+                            <span class="mac-device-option-name">@d.DeviceName</span>
+                            <span class="mac-device-option-ip">@d.DeviceIp</span>
+                        </span>
+                        <span class="mac-device-status @(d.IsLive ? "mac-device-status--live" : "mac-device-status--off")">
+                            <span class="mac-device-dot"></span>
+                            @(d.IsLive ? "Live" : "Inactive")
+                        </span>
+                    </button>
+                </form>
+            }
+        </div>
+    </div>
+}

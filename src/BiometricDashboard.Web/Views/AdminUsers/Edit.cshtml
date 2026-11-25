@@ -1,0 +1,114 @@
+@model BiometricDashboard.Web.Models.UserFormViewModel
+
+@{
+
+    ViewData["Title"] = Model.UserId is null or 0 ? "New user" : "Edit user";
+
+}
+
+@using BiometricDashboard.Web.Models
+@{
+    var editBand = new PortalPageBandViewModel
+    {
+        Eyebrow = "Administration",
+        Title = ViewData["Title"]?.ToString() ?? "User",
+        IconClass = "bi-person-gear",
+        Subtitle = "Portal account details and role assignment",
+        PrimaryActionUrl = Url.Action("Index"),
+        PrimaryActionText = "Back to list",
+        PrimaryActionIcon = "bi-arrow-left",
+        Stats =
+        [
+            new() { Label = "Module", Value = "Users", Meta = "RBAC", IconClass = "bi-people", ColorIndex = 1 },
+            new() { Label = "Security", Value = "Portal", Meta = "Gate Entry", IconClass = "bi-shield-lock", ColorIndex = 2 },
+            new() { Label = "Auth", Value = "Employee ID", Meta = "linked login", IconClass = "bi-person-badge", ColorIndex = 3 },
+            new() { Label = "Status", Value = "Editor", Meta = "form mode", IconClass = "bi-pencil-square", ColorIndex = 4 },
+        ],
+    };
+}
+<div class="portal-page-layout portal-page-layout--scroll">
+    @await Html.PartialAsync("_PortalPageBand", editBand)
+
+<form asp-action="Save" method="post" class="form-panel panel-pro panel-full">
+    @Html.AntiForgeryToken()
+
+    <input type="hidden" asp-for="UserId" />
+
+    <div class="form-grid">
+
+        <label>
+
+            <span>Employee ID</span>
+
+            <input asp-for="EmployeeId" readonly="@(Model.UserId is > 0)" />
+
+        </label>
+
+        <label>
+
+            <span>Display name</span>
+
+            <input asp-for="DisplayName" />
+
+        </label>
+
+        <label>
+
+            <span>Email</span>
+
+            <input asp-for="Email" type="email" />
+
+        </label>
+
+        <label>
+
+            <span>Password @(Model.UserId is > 0 ? "(leave blank to keep)" : "")</span>
+
+            <input asp-for="Password" type="password" />
+
+        </label>
+
+        <label class="checkbox-row">
+
+            <input asp-for="IsActive" />
+
+            <span>Active</span>
+
+        </label>
+
+        <label class="checkbox-row">
+
+            <input asp-for="MustChangePassword" />
+
+            <span>Must change password on next login</span>
+
+        </label>
+
+    </div>
+
+    <fieldset class="perm-fieldset">
+
+        <legend>Roles</legend>
+
+        @foreach (var role in Model.Roles)
+
+        {
+
+            <label class="checkbox-row">
+
+                <input type="checkbox" name="SelectedRoleIds" value="@role.RoleId"
+
+                       checked="@Model.SelectedRoleIds.Contains(role.RoleId)" />
+
+                <span>@role.RoleName</span>
+
+            </label>
+
+        }
+
+    </fieldset>
+
+    <button type="submit" class="btn-primary">Save user</button>
+
+</form>
+</div>

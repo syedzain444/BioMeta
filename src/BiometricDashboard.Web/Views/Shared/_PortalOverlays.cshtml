@@ -1,0 +1,72 @@
+<div id="portalLoader" class="portal-overlay portal-loader-screen" hidden aria-hidden="true" role="dialog" aria-live="polite" aria-label="Loading">
+    <svg width="0" height="0" class="portal-loader-sprite" aria-hidden="true">
+        <defs>
+            <symbol id="portalLoaderFace" viewBox="0 0 24 24">
+                <path class="portal-loader-fp" d="M12 11c0 3-.5 5-1.6 7M8 18.5c1.2-2 1.7-4.2 1.7-6.5a2.3 2.3 0 014.6 0c0 1.4-.1 2.7-.4 4M5.500 15c.4-1 .6-2 .6-3a5.900 5.900 0 0111.800-.4M4.500 8.500A8.500 8.500 0 0120 11c0 1.300-.1 2.500-.5 3.500"/>
+            </symbol>
+            <symbol id="portalLoaderSpark" viewBox="0 0 24 24">
+                <path fill="#fff" d="M10 2l1.600 5.400L17 9l-5.400 1.600L10 16l-1.600-5.400L3 9l5.400-1.600zM18 13l.9 3.100L22 17l-3.100.9L18 21l-.9-3.100L14 17l3.100-.9z"/>
+            </symbol>
+        </defs>
+    </svg>
+    <div class="portal-loader-bg" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+    <div class="portal-loader-scrim" aria-hidden="true"></div>
+
+    <section class="portal-loader-v portal-loader-radar" id="portalLoaderRadar" hidden>
+        <div class="portal-loader-rd">
+            <div class="portal-loader-rg2"></div>
+            <div class="portal-loader-rg2"></div>
+            <div class="portal-loader-rg2"></div>
+            <div class="portal-loader-sw"></div>
+            <div class="portal-loader-ico">
+                <svg fill="#fff"><use href="#portalLoaderSpark"></use></svg>
+            </div>
+            <div class="portal-loader-nd" style="transform:rotate(-90deg) translate(125px) rotate(90deg)">
+                <svg><use href="#portalLoaderFace"></use></svg>
+            </div>
+            <div class="portal-loader-nd" style="transform:rotate(30deg) translate(125px) rotate(-30deg)">
+                <svg><use href="#portalLoaderFace"></use></svg>
+            </div>
+            <div class="portal-loader-nd" style="transform:rotate(150deg) translate(125px) rotate(-150deg)">
+                <svg><use href="#portalLoaderFace"></use></svg>
+            </div>
+        </div>
+        <div class="portal-loader-cap">
+            <p class="portal-loader-m portal-loader-pm">Connecting to biometric devices…</p>
+        </div>
+    </section>
+
+    <section class="portal-loader-v portal-loader-tiles" id="portalLoaderTiles" hidden>
+        <div class="portal-loader-tl">
+            <div class="portal-loader-tr">
+                <div class="portal-loader-tile">
+                    <i></i>
+                    <svg><use href="#portalLoaderFace"></use></svg>
+                    <small>Device 1</small>
+                </div>
+                <div class="portal-loader-tile">
+                    <i></i>
+                    <svg><use href="#portalLoaderFace"></use></svg>
+                    <small>Device 2</small>
+                </div>
+                <div class="portal-loader-tile">
+                    <i></i>
+                    <svg><use href="#portalLoaderFace"></use></svg>
+                    <small>Device 3</small>
+                </div>
+            </div>
+            <div>
+                <div class="portal-loader-big portal-loader-pt">0%</div>
+                <p class="portal-loader-m portal-loader-pm" style="margin-top:8px">Connecting to biometric devices…</p>
+            </div>
+        </div>
+    </section>
+</div>
+
+<div id="portalNavLoad" class="portal-nav-loader" hidden aria-hidden="true">
+    <div class="portal-nav-loader-bar"></div>
+    <div class="portal-nav-loader-panel">
+        <div class="portal-nav-loader-spin"></div>
+        <span>Loading page…</span>
+    </div>
+</div>

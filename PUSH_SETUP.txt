@@ -1,0 +1,39 @@
+PC ko Hanwang push server banane ke steps (NEDO CL-2020 / M2000A)
+================================================================
+
+1) PC ka LAN IP pata karo (same subnet as device 172.16.40.63):
+   PowerShell:  ipconfig
+   Example:     IPv4 Address . . . : 172.16.40.10
+
+2) Windows Firewall mein inbound allow:
+   - TCP 9920
+   - TCP 9924
+   (Settings -> Firewall -> Advanced -> Inbound Rules -> New Rule -> Port)
+
+3) Device par (admin PIN 10492 ya 1990):
+   MENU -> System Settings -> Communication
+   -> Push to Server: ON
+   -> Server IP: aapke PC ka IP (e.g. 172.16.40.10)
+   -> CMD port: 9920  (default)
+   -> HBP port: 9924  (default)
+   Optional: Record Data ON, User Data ON (employees bhi push hon)
+
+   Note: "Host Server ON" alag cheez hai (device khud server).
+         Push ke liye "Push to Server" ON zaroori hai.
+
+   Communication -> Network -> Password: khali / OFF (agar scripts timeout na hon)
+
+4) PC par listener:
+   cd "d:\Zain BTK Projects\Biometric"
+   python push_listener.py --bind 0.0.0.0 --ports 9920 9924
+
+5) Test:
+   - Device par face punch karo
+   - Listener console par PostRecord / Record dikhna chahiye
+   - Files: push_logs\push_YYYY-MM-DD.jsonl
+
+6) Agar kuch na aaye:
+   - ping 172.16.40.63 from PC
+   - Device server IP dubara check
+   - Firewall off test (sirf test ke liye)
+   - Pull ab bhi chalega: python check_data.py

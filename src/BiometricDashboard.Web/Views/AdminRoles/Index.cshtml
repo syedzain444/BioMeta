@@ -1,0 +1,74 @@
+@model BiometricDashboard.Web.Models.RoleListViewModel
+@using BiometricDashboard.Web.Models
+@{
+    ViewData["Title"] = "Roles";
+    ViewBag.ActiveNav = "AdminRoles";
+    var roles = Model.Roles;
+    var band = new PortalPageBandViewModel
+    {
+        Eyebrow = "Administration",
+        Title = "Role management",
+        IconClass = "bi-shield-lock",
+        Subtitle = "RBAC roles and module permissions",
+        Stats =
+        [
+            new() { Label = "Total roles", Value = roles.Count.ToString(), Meta = "defined in portal", IconClass = "bi-shield", ColorIndex = 1 },
+            new() { Label = "Active", Value = roles.Count(r => r.IsActive).ToString(), Meta = "in use", IconClass = "bi-check-circle", ColorIndex = 2 },
+            new() { Label = "System", Value = roles.Count(r => r.IsSystem).ToString(), Meta = "built-in", IconClass = "bi-gear", ColorIndex = 3 },
+            new() { Label = "Custom", Value = roles.Count(r => !r.IsSystem).ToString(), Meta = "editable", IconClass = "bi-sliders", ColorIndex = 4 },
+        ],
+    };
+}
+
+<div class="portal-page-layout">
+    <div class="portal-page-head">
+        @await Html.PartialAsync("_PortalPageBand", band)
+    </div>
+
+    <section class="panel panel-pro panel-full panel-datatable data-panel">
+        <header class="panel-head panel-head-pro">
+            <h2><i class="bi bi-key panel-title-icon"></i> Roles</h2>
+            @if (User.HasClaim("permission", "roles.manage"))
+            {
+                <div class="panel-head-tools">
+                    <a class="portal-panel-add" data-grid-toolbar asp-action="Create">
+                        <span class="portal-panel-add-icon"><i class="bi bi-plus-lg" aria-hidden="true"></i></span>
+                        <span>New role</span>
+                    </a>
+                </div>
+            }
+        </header>
+        <div class="portal-dt-host">
+            <table id="adminRolesTable" class="display portal-datatable data-table grid grid-head-dark" style="width:100%" data-dt-order="0,asc">
+                <thead>
+                    <tr>
+                        <th><span class="th-label"><i class="bi bi-code-slash th-icon" aria-hidden="true"></i>Code</span></th>
+                        <th><span class="th-label"><i class="bi bi-shield th-icon" aria-hidden="true"></i>Name</span></th>
+                        <th><span class="th-label"><i class="bi bi-gear th-icon" aria-hidden="true"></i>System</span></th>
+                        <th><span class="th-label"><i class="bi bi-toggle-on th-icon" aria-hidden="true"></i>Status</span></th>
+                        <th class="col-actions" aria-label="Actions"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach (var r in roles)
+                {
+                    <tr>
+                        <td><code class="emp-id">@r.RoleCode</code></td>
+                        <td><i class="bi bi-shield-check row-icon"></i> @r.RoleName</td>
+                        <td>@(r.IsSystem ? "Yes" : "—")</td>
+                        <td><span class="badge @(r.IsActive ? "ok" : "muted")">@(r.IsActive ? "Active" : "Inactive")</span></td>
+                        <td class="row-actions portal-row-actions">
+                            @if (User.HasClaim("permission", "roles.manage"))
+                            {
+                                <div class="portal-row-actions-inner">
+                                    <a class="portal-act portal-act--muted" asp-action="Edit" asp-route-id="@r.RoleId" title="Permissions" aria-label="Edit role permissions"><i class="bi bi-sliders"></i></a>
+                                </div>
+                            }
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </section>
+</div>

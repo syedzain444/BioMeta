@@ -1,0 +1,1076 @@
+/* GateOS Overview dashboard — mock layout (scoped .gateos-page-overview) */
+
+.gateos-page-overview .gateos-desktop {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.gateos-page-overview .gov-win {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.gateos-page-overview .gov-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 14px;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid var(--gateos-line);
+  box-shadow: 0 4px 12px -8px rgba(15, 23, 42, 0.3);
+  color: #475569;
+  white-space: nowrap;
+  font-size: 12.5px;
+  font-weight: 500;
+}
+
+.gateos-page-overview .gov-pill i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--gateos-rose-500);
+  box-shadow: 0 0 0 3px rgba(244, 63, 94, 0.16);
+  font-style: normal;
+}
+
+.gateos-page-overview .gov-pill.on i {
+  background: var(--gateos-green-500);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+  animation: gov-pu 1.6s infinite;
+}
+
+@keyframes gov-pu {
+  50% {
+    opacity: 0.4;
+  }
+}
+
+.gateos-page-overview .gov-sp {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 12px;
+  border-radius: 9px;
+  background: rgba(15, 23, 42, 0.06);
+  color: #64748b;
+  cursor: pointer;
+  border: 0;
+  font-size: 12.5px;
+  font-weight: 500;
+}
+
+.gateos-page-overview .gov-sp:hover {
+  background: rgba(15, 23, 42, 0.1);
+}
+
+.gateos-page-overview .gov-sp svg {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+}
+
+.gateos-page-overview .gov-sp kbd {
+  font: 600 10.5px Inter, sans-serif;
+  padding: 1px 6px;
+  border-radius: 5px;
+  background: #fff;
+  border: 1px solid var(--gateos-line);
+}
+
+.gateos-page-overview .gov-tb {
+  flex: none;
+  height: 44px;
+  display: grid;
+  grid-template-columns: 90px 1fr 90px;
+  align-items: center;
+  padding: 0 16px;
+  background: linear-gradient(rgba(255, 255, 255, 0.95), rgba(244, 247, 251, 0.9));
+  border-bottom: 1px solid var(--gateos-line);
+}
+
+.gateos-page-overview .gov-lt {
+  display: flex;
+  gap: 8px;
+}
+
+.gateos-page-overview .gov-lt i {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: block;
+  font-style: normal;
+}
+
+.gateos-page-overview .gov-lt i:nth-child(1) {
+  background: #ff5f57;
+}
+
+.gateos-page-overview .gov-lt i:nth-child(2) {
+  background: #febc2e;
+}
+
+.gateos-page-overview .gov-lt i:nth-child(3) {
+  background: #28c840;
+}
+
+.gateos-page-overview .gov-tb h2 {
+  text-align: center;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #475569;
+  margin: 0;
+}
+
+.gateos-page-overview .gov-bar {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 10px 16px;
+  background: #fff;
+  border-bottom: 1px solid var(--gateos-line);
+}
+
+.gateos-page-overview .gov-seg {
+  display: inline-flex;
+  padding: 3px;
+  border-radius: 13px;
+  background: var(--gateos-field);
+  border: 1.5px solid var(--gateos-line);
+}
+
+.gateos-page-overview .gov-seg button {
+  height: 30px;
+  padding: 0 13px;
+  border: 0;
+  border-radius: 10px;
+  background: none;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--gateos-muted);
+  cursor: pointer;
+  transition: all 0.18s;
+}
+
+.gateos-page-overview .gov-seg button:hover {
+  color: var(--gateos-ink);
+}
+
+.gateos-page-overview .gov-seg button[aria-pressed="true"] {
+  background: #fff;
+  color: var(--gateos-ink);
+  box-shadow: 0 4px 10px -4px rgba(15, 23, 42, 0.3);
+}
+
+.gateos-page-overview .gov-spc {
+  flex: 1;
+}
+
+.gateos-page-overview .gov-chip {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: #fff7ed;
+  color: #c2410c;
+  border: 1px solid #fed7aa;
+}
+
+.gateos-page-overview .gov-chip.live {
+  background: #ecfdf5;
+  color: #047857;
+  border-color: #a7f3d0;
+}
+
+.gateos-page-overview .gov-sw {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  user-select: none;
+}
+
+.gateos-page-overview .gov-sw input {
+  position: absolute;
+  opacity: 0;
+}
+
+.gateos-page-overview .gov-trk {
+  width: 38px;
+  height: 22px;
+  border-radius: 99px;
+  background: #cbd5e1;
+  position: relative;
+  transition: background 0.2s;
+}
+
+.gateos-page-overview .gov-trk::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+  transition: transform 0.2s;
+}
+
+.gateos-page-overview .gov-sw input:checked + .gov-trk {
+  background: var(--gateos-green-500);
+}
+
+.gateos-page-overview .gov-sw input:checked + .gov-trk::after {
+  transform: translateX(16px);
+}
+
+.gateos-page-overview .gov-btn {
+  height: 36px;
+  padding: 0 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  border: 1.5px solid var(--gateos-line);
+  background: var(--gateos-field);
+  border-radius: 11px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #334155;
+  cursor: pointer;
+}
+
+.gateos-page-overview .gov-btn svg {
+  width: 15px;
+  height: 15px;
+  color: var(--gateos-teal-500);
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+}
+
+.gateos-page-overview .gov-btn:hover {
+  background: #e9eff7;
+}
+
+.gateos-page-overview .gov-ct {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 16px;
+  background: linear-gradient(#f7f9fd, #f1f5fb);
+  scrollbar-width: thin;
+}
+
+.gateos-page-overview .gov-hd {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 12px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+
+.gateos-page-overview .gov-hd h1 {
+  font-family: var(--gateos-display);
+  font-size: clamp(20px, 2.4vw, 27px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin: 0;
+}
+
+.gateos-page-overview .gov-hd p {
+  font-size: 13px;
+  color: var(--gateos-muted);
+  margin-top: 3px;
+}
+
+.gateos-page-overview .gov-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.gateos-page-overview .gov-card {
+  background: #fff;
+  border-radius: 22px;
+  border: 1px solid rgba(229, 234, 242, 0.9);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 18px 36px -26px rgba(15, 23, 42, 0.25);
+  padding: 16px 18px;
+  min-width: 0;
+}
+
+.gateos-page-overview .gov-card h3 {
+  font-family: var(--gateos-display);
+  font-size: 14.5px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.gateos-page-overview .gov-card h3 small {
+  font: 500 11.5px Inter, sans-serif;
+  color: var(--gateos-muted);
+  margin-left: auto;
+}
+
+.gateos-page-overview .gov-tr h3 small#trS {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 10px;
+  margin-right: auto;
+  font-weight: 600;
+}
+
+.gateos-page-overview .gov-tr h3 small#trS .gov-tr-in,
+.gateos-page-overview .gov-tr h3 small#trS .gov-tr-out {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  border: 1px solid var(--gateos-line);
+  background: #fff;
+  color: #334155;
+}
+
+.gateos-page-overview .gov-tr h3 small#trS .gov-tr-in i,
+.gateos-page-overview .gov-tr h3 small#trS .gov-tr-out i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  font-style: normal;
+}
+
+.gateos-page-overview .gov-tr h3 small#trS .gov-tr-in i {
+  background: var(--gateos-green-500);
+}
+
+.gateos-page-overview .gov-tr h3 small#trS .gov-tr-out i {
+  background: var(--gateos-indigo-500);
+}
+
+.gateos-page-overview .gov-k {
+  grid-column: span 3;
+  position: relative;
+  overflow: hidden;
+  border-radius: 22px;
+  padding: 15px 18px 12px;
+  color: #fff;
+  min-height: 138px;
+  box-shadow: 0 20px 36px -22px var(--gov-sh, rgba(0, 0, 0, 0.3));
+  transition: transform 0.25s;
+  cursor: default;
+}
+
+.gateos-page-overview .gov-k:hover {
+  transform: translateY(-4px);
+}
+
+.gateos-page-overview .gov-k1 {
+  background: linear-gradient(135deg, var(--gateos-green-500), var(--gateos-green-300));
+  --gov-sh: rgba(16, 185, 129, 0.8);
+}
+
+.gateos-page-overview .gov-k2 {
+  background: linear-gradient(135deg, var(--gateos-indigo-500), var(--gateos-indigo-400));
+  --gov-sh: rgba(99, 102, 241, 0.8);
+}
+
+.gateos-page-overview .gov-k3 {
+  background: linear-gradient(135deg, var(--gateos-orange-500), #f97316);
+  --gov-sh: rgba(249, 115, 22, 0.75);
+}
+
+.gateos-page-overview .gov-k4 {
+  background: linear-gradient(135deg, var(--gateos-pink-500), var(--gateos-rose-500));
+  --gov-sh: rgba(236, 72, 153, 0.75);
+}
+
+.gateos-page-overview .gov-k::before {
+  content: "";
+  position: absolute;
+  right: -40px;
+  top: -60px;
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.3), transparent 70%);
+}
+
+.gateos-page-overview .gov-k .l {
+  position: relative;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.92;
+}
+
+.gateos-page-overview .gov-k .v {
+  position: relative;
+  margin-top: 6px;
+  font-family: var(--gateos-display);
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.gateos-page-overview .gov-k .v.sm {
+  font-size: 27px;
+}
+
+.gateos-page-overview .gov-k .dl {
+  position: relative;
+  display: inline-block;
+  margin-top: 7px;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.24);
+}
+
+.gateos-page-overview .gov-k .ic {
+  position: absolute;
+  right: 12px;
+  top: 12px;
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.34);
+}
+
+.gateos-page-overview .gov-k .ic svg {
+  width: 18px;
+  height: 18px;
+  stroke: #fff;
+  fill: none;
+  stroke-width: 2;
+}
+
+.gateos-page-overview .gov-k .sk {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 34px;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.gateos-page-overview .gov-k .sk path[fill="none"] {
+  fill: none;
+}
+
+.gateos-page-overview .gov-tr {
+  grid-column: span 8;
+}
+
+.gateos-page-overview .gov-dv {
+  grid-column: span 4;
+}
+
+.gateos-page-overview .gov-hm {
+  grid-column: span 5;
+}
+
+.gateos-page-overview .gov-dn {
+  grid-column: span 3;
+}
+
+.gateos-page-overview .gov-fd {
+  grid-column: span 4;
+}
+
+.gateos-page-overview .lgs {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.gateos-page-overview .lg {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 99px;
+  border: 1.5px solid var(--gateos-line);
+  background: #fff;
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.gateos-page-overview .lg i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  font-style: normal;
+}
+
+.gateos-page-overview .lg[aria-pressed="false"] {
+  opacity: 0.45;
+  text-decoration: line-through;
+}
+
+.gateos-page-overview .gov-tr .cw {
+  position: relative;
+  overflow: hidden;
+  min-height: 260px;
+  padding: 4px 2px 0;
+  border-radius: 14px;
+  background: linear-gradient(180deg, #fafcff 0%, #fff 100%);
+  border: 1px solid rgba(229, 234, 242, 0.95);
+}
+
+.gateos-page-overview #trend {
+  width: 100%;
+  height: auto;
+  min-height: 240px;
+  display: block;
+  overflow: visible;
+}
+
+.gateos-page-overview #trend .gov-chart-grid {
+  font-family: Inter, system-ui, sans-serif;
+}
+
+.gateos-page-overview #trend .gov-grid-line {
+  stroke: #e8edf4;
+  stroke-width: 1;
+  stroke-dasharray: 4 6;
+}
+
+.gateos-page-overview #trend .gov-axis-y {
+  text-anchor: end;
+  font-size: 10.5px;
+  font-weight: 600;
+  fill: #64748b;
+  stroke: none;
+}
+
+.gateos-page-overview #trend .gov-axis-x {
+  text-anchor: middle;
+  font-size: 10.5px;
+  font-weight: 600;
+  fill: #64748b;
+  stroke: none;
+}
+
+.gateos-page-overview #trend .gov-chart-line {
+  fill: none;
+  vector-effect: non-scaling-stroke;
+}
+
+.gateos-page-overview #trend .gov-chart-area {
+  stroke: none;
+}
+
+.gateos-page-overview .tip {
+  position: absolute;
+  top: 8px;
+  transform: translateX(-50%);
+  pointer-events: none;
+  background: rgba(11, 18, 32, 0.95);
+  color: #fff;
+  border-radius: 12px;
+  padding: 8px 11px;
+  font-size: 11.5px;
+  white-space: nowrap;
+  box-shadow: 0 14px 28px -10px rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transition: opacity 0.12s;
+  z-index: 3;
+}
+
+.gateos-page-overview .tip b {
+  display: block;
+  margin-bottom: 3px;
+  font-size: 12px;
+}
+
+.gateos-page-overview .tip span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.gateos-page-overview .tip i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  font-style: normal;
+}
+
+.gateos-page-overview .cw.draw .gov-chart-line {
+  animation: gov-dr 1.1s ease forwards;
+}
+
+.gateos-page-overview .cw.draw .gov-chart-area {
+  animation: gov-fi 0.9s 0.3s both;
+}
+
+@keyframes gov-dr {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes gov-fi {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.gateos-page-overview .gov-chart-line {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+
+.gateos-page-overview .dev {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 11px 12px;
+  border-radius: 16px;
+  border: 1.5px solid var(--gateos-line);
+  background: #fff;
+  cursor: pointer;
+  text-align: left;
+  margin-bottom: 8px;
+  transition: all 0.18s;
+}
+
+.gateos-page-overview .dev:hover {
+  border-color: #bfe9e2;
+  transform: translateX(3px);
+}
+
+.gateos-page-overview .dev[aria-pressed="true"] {
+  border-color: var(--gateos-green-500);
+  background: linear-gradient(160deg, #ecfdf5, #e6f7f4);
+  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.12);
+}
+
+.gateos-page-overview .dev .di {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  flex: none;
+}
+
+.gateos-page-overview .dev .di svg {
+  width: 19px;
+  height: 19px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+}
+
+.gateos-page-overview .dev .m {
+  flex: 1;
+  min-width: 0;
+}
+
+.gateos-page-overview .dev b {
+  font-size: 13.5px;
+}
+
+.gateos-page-overview .dev small {
+  display: block;
+  font-size: 11px;
+  color: var(--gateos-muted);
+}
+
+.gateos-page-overview .dev .n {
+  font: 800 17px var(--gateos-display);
+  font-variant-numeric: tabular-nums;
+}
+
+.gateos-page-overview .bt {
+  height: 5px;
+  border-radius: 9px;
+  background: #e8edf4;
+  margin-top: 7px;
+  overflow: hidden;
+}
+
+.gateos-page-overview .bt i {
+  display: block;
+  height: 100%;
+  border-radius: 9px;
+  transition: width 0.6s ease;
+}
+
+.gateos-page-overview .st {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #94a3b8;
+}
+
+.gateos-page-overview .st::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.gateos-page-overview .st.ok {
+  color: var(--gateos-green-500);
+}
+
+.gateos-page-overview .hg {
+  display: grid;
+  grid-template-columns: 34px repeat(17, 1fr);
+  gap: 3px;
+  font-size: 10px;
+  color: var(--gateos-muted);
+}
+
+.gateos-page-overview .hg .c {
+  aspect-ratio: 1;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: transform 0.12s;
+  min-height: 14px;
+}
+
+.gateos-page-overview .hg .c:hover {
+  transform: scale(1.35);
+  z-index: 2;
+  position: relative;
+}
+
+.gateos-page-overview .hg .c.pin {
+  outline: 2px solid var(--gateos-navy-800);
+  outline-offset: 1px;
+}
+
+.gateos-page-overview .hg .r {
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+}
+
+.gateos-page-overview .hg .h {
+  text-align: center;
+  font-size: 9.5px;
+}
+
+.gateos-page-overview .hi {
+  margin-top: 10px;
+  font-size: 12px;
+  color: #475569;
+  min-height: 18px;
+  padding: 7px 10px;
+  border-radius: 10px;
+  background: var(--gateos-field);
+}
+
+.gateos-page-overview .dw {
+  display: grid;
+  place-items: center;
+  position: relative;
+}
+
+.gateos-page-overview .dw svg {
+  width: 150px;
+  height: 150px;
+  transform: rotate(-90deg);
+}
+
+.gateos-page-overview .dw circle {
+  transition: stroke-width 0.15s, opacity 0.15s;
+  cursor: pointer;
+  fill: none;
+}
+
+.gateos-page-overview .dc {
+  position: absolute;
+  text-align: center;
+  pointer-events: none;
+}
+
+.gateos-page-overview .dc b {
+  display: block;
+  font: 800 22px var(--gateos-display);
+}
+
+.gateos-page-overview .dc small {
+  font-size: 11px;
+  color: var(--gateos-muted);
+}
+
+.gateos-page-overview .dl2 {
+  margin-top: 10px;
+  display: grid;
+  gap: 6px;
+}
+
+.gateos-page-overview .dl2 div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  padding: 4px 6px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.gateos-page-overview .dl2 div:hover {
+  background: var(--gateos-field);
+}
+
+.gateos-page-overview .dl2 i {
+  width: 9px;
+  height: 9px;
+  border-radius: 3px;
+  font-style: normal;
+}
+
+.gateos-page-overview .dl2 span {
+  margin-left: auto;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.gateos-page-overview #feed {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 8px;
+  max-height: 300px;
+  overflow: hidden;
+}
+
+.gateos-page-overview #feed li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 10px;
+  border-radius: 14px;
+  background: var(--gateos-field);
+  animation: gov-si 0.45s cubic-bezier(0.3, 1.4, 0.5, 1);
+}
+
+@keyframes gov-si {
+  from {
+    opacity: 0;
+    transform: translateY(-14px) scale(0.96);
+  }
+}
+
+.gateos-page-overview #feed .a {
+  width: 34px;
+  height: 34px;
+  border-radius: 11px;
+  display: grid;
+  place-items: center;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #fff;
+  flex: none;
+}
+
+.gateos-page-overview #feed .m {
+  flex: 1;
+  min-width: 0;
+  font-size: 12.5px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gateos-page-overview #feed small {
+  display: block;
+  font-weight: 500;
+  font-size: 11px;
+  color: var(--gateos-muted);
+}
+
+.gateos-page-overview #feed .t {
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 99px;
+}
+
+.gateos-page-overview #feed .t.in {
+  background: #d1fae5;
+  color: #047857;
+}
+
+.gateos-page-overview #feed .t.out {
+  background: #e0e7ff;
+  color: #4338ca;
+}
+
+.gateos-page-overview #feed time {
+  font-size: 11px;
+  color: var(--gateos-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.gateos-page-overview .gov-sbar {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 16px;
+  background: linear-gradient(#f4f7fb, #eef2f8);
+  border-top: 1px solid var(--gateos-line);
+  font-size: 12px;
+  color: #475569;
+}
+
+.gateos-page-overview .gov-sbar b {
+  color: var(--gateos-ink);
+}
+
+.gateos-page-overview .gov-ov[hidden] {
+  display: none !important;
+}
+
+.gateos-page-overview .gov-ov {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(15, 23, 42, 0.25);
+  backdrop-filter: blur(6px);
+  display: flex;
+  justify-content: center;
+  padding-top: 14vh;
+}
+
+.gateos-page-overview .spl {
+  width: min(560px, 92vw);
+  height: fit-content;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 50px 100px -30px rgba(15, 23, 42, 0.6);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+}
+
+.gateos-page-overview .spl input {
+  width: 100%;
+  height: 58px;
+  border: 0;
+  border-bottom: 1px solid var(--gateos-line);
+  padding: 0 22px;
+  font-size: 16px;
+  outline: none;
+  background: none;
+}
+
+.gateos-page-overview .spl ul {
+  list-style: none;
+  padding: 8px;
+  margin: 0;
+  max-height: 320px;
+  overflow: auto;
+}
+
+.gateos-page-overview .spl li {
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  gap: 10px;
+}
+
+.gateos-page-overview .spl li small {
+  margin-left: auto;
+  color: var(--gateos-muted);
+  font-size: 11.5px;
+}
+
+.gateos-page-overview .spl li.s {
+  background: linear-gradient(135deg, #ecfdf5, #e6f7f4);
+  color: #065f46;
+}
+
+@media (max-width: 1180px) {
+  .gateos-page-overview .gov-k {
+    grid-column: span 6;
+  }
+  .gateos-page-overview .gov-tr,
+  .gateos-page-overview .gov-dv,
+  .gateos-page-overview .gov-hm,
+  .gateos-page-overview .gov-fd {
+    grid-column: span 12;
+  }
+  .gateos-page-overview .gov-dn {
+    grid-column: span 6;
+  }
+}
+
+@media (max-width: 900px) {
+  .gateos-page-overview .gov-pill,
+  .gateos-page-overview .gov-sp kbd {
+    display: none;
+  }
+}
+
+@media (max-width: 700px) {
+  .gateos-page-overview .gov-k,
+  .gateos-page-overview .gov-dn {
+    grid-column: span 12;
+  }
+  .gateos-page-overview .gov-bar .gov-spc {
+    display: none;
+  }
+  .gateos-page-overview .gov-tb {
+    grid-template-columns: 60px 1fr 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gateos-page-overview * {
+    animation: none !important;
+    transition: none !important;
+  }
+}

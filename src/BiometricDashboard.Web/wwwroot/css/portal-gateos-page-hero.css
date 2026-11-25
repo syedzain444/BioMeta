@@ -1,0 +1,250 @@
+/* GateOS page hero + stat row (shared with Device Enrolled Users mock) */
+
+.gateos-portal .portal-page-head-band {
+  margin-bottom: 14px;
+}
+
+.gateos-portal .gph-top-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) repeat(var(--gph-stat-count, 3), minmax(0, 1fr));
+  gap: 14px;
+}
+
+.gateos-portal .gph-hero {
+  position: relative;
+  overflow: hidden;
+  border-radius: 22px;
+  padding: 18px 22px;
+  color: #fff;
+  min-height: 112px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: radial-gradient(420px 220px at 95% 20%, rgba(20, 184, 166, 0.5), transparent 65%),
+    linear-gradient(155deg, var(--gateos-navy-950), var(--gateos-navy-800) 55%, var(--gateos-teal-700) 160%);
+  box-shadow: 0 22px 44px -26px rgba(7, 12, 24, 0.7);
+}
+
+.gateos-portal .gph-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1px);
+  background-size: 20px 20px;
+  mask-image: linear-gradient(90deg, transparent, #000 80%);
+  pointer-events: none;
+}
+
+.gateos-portal .gph-hero > * {
+  position: relative;
+}
+
+.gateos-portal .gph-tag {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 11px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.gateos-portal .gph-tag i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gateos-green-500);
+  font-style: normal;
+}
+
+.gateos-portal .gph-hero-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+.gateos-portal .gph-hero-ic {
+  width: 42px;
+  height: 42px;
+  flex: none;
+  border-radius: 13px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, var(--gateos-green-500), var(--gateos-teal-500));
+  box-shadow: 0 10px 20px -8px rgba(16, 185, 129, 0.85);
+  font-size: 1.15rem;
+  color: #fff;
+}
+
+.gateos-portal .gph-hero h1 {
+  font-family: var(--gateos-display);
+  font-size: clamp(20px, 2.2vw, 26px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin: 0;
+  flex: 1;
+  min-width: 0;
+}
+
+.gateos-portal .gph-hero-action {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 11px;
+  font-size: 12.5px;
+  font-weight: 700;
+  text-decoration: none;
+  color: #065f46;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 8px 20px -10px rgba(0, 0, 0, 0.4);
+  white-space: nowrap;
+}
+
+.gateos-portal .gph-hero-action:hover {
+  background: #fff;
+  color: #047857;
+}
+
+.gateos-portal .gph-hero p {
+  margin-top: 8px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.68);
+  line-height: 1.5;
+}
+
+.gateos-portal .gph-hero p em {
+  font-style: normal;
+  color: var(--gateos-teal-300);
+  font-weight: 600;
+}
+
+.gateos-portal .gph-stat {
+  position: relative;
+  overflow: hidden;
+  border-radius: 22px;
+  padding: 14px 16px 20px;
+  color: #fff;
+  min-height: 112px;
+  box-shadow: 0 20px 36px -22px var(--gph-sh, rgba(0, 0, 0, 0.3));
+  transition: transform 0.25s;
+}
+
+.gateos-portal .gph-stat:hover {
+  transform: translateY(-3px);
+}
+
+.gateos-portal .gph-stat.g {
+  background: linear-gradient(135deg, var(--gateos-green-500), var(--gateos-green-300));
+  --gph-sh: rgba(16, 185, 129, 0.8);
+}
+
+.gateos-portal .gph-stat.o {
+  background: linear-gradient(135deg, var(--gateos-orange-500), #f97316);
+  --gph-sh: rgba(249, 115, 22, 0.75);
+}
+
+.gateos-portal .gph-stat.i {
+  background: linear-gradient(135deg, var(--gateos-indigo-500), var(--gateos-indigo-400));
+  --gph-sh: rgba(99, 102, 241, 0.8);
+}
+
+.gateos-portal .gph-stat.p {
+  background: linear-gradient(135deg, var(--gateos-pink-500), var(--gateos-rose-500));
+  --gph-sh: rgba(236, 72, 153, 0.75);
+}
+
+.gateos-portal .gph-stat::before {
+  content: "";
+  position: absolute;
+  right: -40px;
+  top: -60px;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.3), transparent 70%);
+}
+
+.gateos-portal .gph-stat .k {
+  position: relative;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.92;
+}
+
+.gateos-portal .gph-stat .v {
+  position: relative;
+  margin-top: 6px;
+  font-family: var(--gateos-display);
+  font-size: clamp(22px, 2.5vw, 32px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+  word-break: break-word;
+}
+
+.gateos-portal .gph-stat .s {
+  position: relative;
+  margin-top: 5px;
+  font-size: 12px;
+  opacity: 0.9;
+  line-height: 1.35;
+}
+
+.gateos-portal .gph-stat .ico {
+  position: absolute;
+  right: 12px;
+  top: 12px;
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.34);
+  font-size: 1.05rem;
+  color: #fff;
+}
+
+.gateos-portal .gph-wave {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 24px;
+  pointer-events: none;
+}
+
+.gateos-portal .gph-wave path {
+  fill: rgba(255, 255, 255, 0.24);
+  stroke: none;
+}
+
+@media (max-width: 1180px) {
+  .gateos-portal .gph-top-row {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .gateos-portal .gph-hero {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 700px) {
+  .gateos-portal .gph-top-row {
+    grid-template-columns: 1fr;
+  }
+}

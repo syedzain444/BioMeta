@@ -1,0 +1,4 @@
+<nav class="app-nav">
+    <a class="app-nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Dashboard" ? "active" : "")" asp-controller="Dashboard" asp-action="Index">Live dashboard</a>
+    <a class="app-nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Logs" ? "active" : "")" asp-controller="Logs" asp-action="Index">Attendance logs</a>
+</nav>

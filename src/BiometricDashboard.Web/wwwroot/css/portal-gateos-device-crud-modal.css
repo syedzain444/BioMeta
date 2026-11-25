@@ -1,0 +1,553 @@
+/* Device CRUD modal — Biometa mac mock (scoped) */
+.gateos-portal .adev-sheet-bg--mac {
+  --dmac-ink: #111827;
+  --dmac-mute: #6b7280;
+  --dmac-glass: rgba(250, 251, 254, 0.8);
+  --dmac-gb: rgba(255, 255, 255, 0.95);
+  --dmac-group: rgba(255, 255, 255, 0.92);
+  --dmac-line: rgba(17, 24, 39, 0.08);
+  --dmac-chip: rgba(60, 70, 110, 0.07);
+  --dmac-scrim: rgba(225, 229, 242, 0.55);
+  --dmac-g1: #34d399;
+  --dmac-g2: #0ea371;
+  background: var(--dmac-scrim);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.gateos-portal .adev-sheet-bg--mac::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.45;
+  filter: blur(26px) saturate(1.3);
+  transform: scale(1.1);
+  background:
+    linear-gradient(90deg, transparent, transparent),
+    radial-gradient(circle at 20% 10%, #1a4d4a 0 120px, transparent 121px),
+    radial-gradient(circle at 40% 8%, #1fb37c 0 120px, transparent 121px),
+    radial-gradient(circle at 60% 12%, #e8931c 0 120px, transparent 121px),
+    radial-gradient(circle at 80% 6%, #5b5bf0 0 120px, transparent 121px);
+}
+
+.gateos-portal .adev-sheet--crud {
+  width: min(880px, 100%);
+  max-height: calc(100vh - 32px);
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  overflow: visible;
+  animation: dmac-pop 0.45s cubic-bezier(0.2, 0.9, 0.3, 1.15);
+}
+
+@keyframes dmac-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.94) translateY(10px);
+  }
+}
+
+.gateos-portal .dmac-modal {
+  position: relative;
+  width: 100%;
+  max-height: calc(100vh - 32px);
+  display: grid;
+  grid-template-columns: 244px 1fr;
+  border-radius: 32px;
+  overflow: hidden;
+  background: var(--dmac-glass);
+  backdrop-filter: blur(40px) saturate(1.8);
+  -webkit-backdrop-filter: blur(40px) saturate(1.8);
+  border: 1px solid var(--dmac-gb);
+  box-shadow:
+    0 40px 90px -24px rgba(20, 30, 60, 0.55),
+    inset 0 1px 0 var(--dmac-gb);
+  color: var(--dmac-ink);
+  font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", sans-serif;
+}
+
+.gateos-portal .dmac-sprite {
+  position: absolute;
+}
+
+.gateos-portal .dmac-side {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 62px 18px 20px;
+  color: var(--dmac-ink);
+  border-right: 1px solid var(--dmac-line);
+  background:
+    radial-gradient(260px 220px at 0 0, rgba(52, 211, 153, 0.26), transparent 70%),
+    linear-gradient(170deg, rgba(236, 250, 245, 0.85), rgba(255, 255, 255, 0.55));
+}
+
+.gateos-portal .dmac-dots {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  gap: 8px;
+}
+
+.gateos-portal .dmac-dots button {
+  box-shadow: inset 0 0 0 0.5px rgba(0, 0, 0, 0.15);
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  background: #ff5f57;
+}
+
+.gateos-portal .dmac-dots button:nth-child(2) {
+  background: #febc2e;
+}
+.gateos-portal .dmac-dots button:nth-child(3) {
+  background: #28c840;
+}
+
+.gateos-portal .dmac-ico {
+  width: 60px;
+  height: 60px;
+  border-radius: 17px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(145deg, var(--dmac-g1), var(--dmac-g2));
+  box-shadow:
+    0 14px 26px -8px rgba(16, 185, 129, 0.6),
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.45);
+  color: #fff;
+}
+
+.gateos-portal .dmac-ico svg {
+  width: 30px;
+  height: 30px;
+}
+
+.gateos-portal .dmac-brand {
+  margin: 16px 0 2px;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: #4f8f80;
+}
+
+.gateos-portal .dmac-side h2 {
+  margin: 0;
+  font-size: 22px;
+  letter-spacing: -0.02em;
+  font-weight: 300;
+}
+
+.gateos-portal .dmac-side h2 b {
+  font-weight: 700;
+}
+
+.gateos-portal .dmac-sub {
+  font:
+    12px ui-monospace,
+    Menlo,
+    Consolas,
+    monospace;
+  color: var(--dmac-mute);
+  margin-top: 4px;
+  word-break: break-all;
+}
+
+.gateos-portal .dmac-ports {
+  margin-top: 22px;
+  display: grid;
+  gap: 8px;
+}
+
+.gateos-portal .dmac-pt {
+  display: flex;
+  align-items: center;
+  padding: 11px 14px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid var(--dmac-line);
+  box-shadow: 0 2px 6px -3px rgba(40, 60, 90, 0.15);
+  font-size: 12px;
+}
+
+.gateos-portal .dmac-pt b {
+  display: inline-flex;
+  align-items: center;
+  font-size: 11.5px;
+  letter-spacing: 0.05em;
+  color: var(--dmac-mute);
+}
+
+.gateos-portal .dmac-pt span {
+  margin-left: auto;
+  text-align: right;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--dmac-ink);
+  line-height: 1.1;
+}
+
+.gateos-portal .dmac-pt small {
+  display: block;
+  font-size: 10.5px;
+  font-weight: 400;
+  color: var(--dmac-mute);
+}
+
+.gateos-portal .dmac-pt-sel {
+  background: rgba(16, 185, 129, 0.12);
+  border-color: rgba(16, 185, 129, 0.55);
+}
+
+.gateos-portal .dmac-note {
+  margin-top: auto;
+  padding-top: 18px;
+  font-size: 11.5px;
+  line-height: 1.45;
+  color: var(--dmac-mute);
+}
+
+.gateos-portal .dmac-main {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+
+.gateos-portal .dmac-tool {
+  padding: 18px 24px;
+  text-align: center;
+  font-size: 13.5px;
+  font-weight: 600;
+  border-bottom: 1px solid var(--dmac-line);
+}
+
+.gateos-portal .dmac-scroll {
+  overflow: auto;
+  padding: 18px 24px 6px;
+  flex: 1;
+  min-height: 0;
+}
+
+.gateos-portal .dmac-val {
+  margin-bottom: 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #991b1b;
+  font-size: 12.5px;
+}
+
+.gateos-portal .dmac-val ul {
+  margin: 6px 0 0;
+  padding-left: 18px;
+}
+
+.gateos-portal .dmac-cap {
+  margin: 14px 0 6px 14px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--dmac-mute);
+}
+
+.gateos-portal .dmac-cap:first-child {
+  margin-top: 0;
+}
+
+.gateos-portal .dmac-grp {
+  background: var(--dmac-group);
+  border: 1px solid var(--dmac-line);
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+.gateos-portal .dmac-rw {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 16px;
+  min-height: 48px;
+  border-top: 1px solid var(--dmac-line);
+  font-size: 14px;
+}
+
+.gateos-portal .dmac-rw:first-child {
+  border-top: 0;
+}
+
+.gateos-portal .dmac-rw label,
+.gateos-portal .dmac-rw .dmac-l {
+  flex: 0 0 40%;
+  font-weight: 500;
+}
+
+.gateos-portal .dmac-ri {
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  display: grid;
+  place-items: center;
+  flex: none;
+  color: #fff;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    0 3px 6px -2px rgba(40, 50, 80, 0.3);
+}
+
+.gateos-portal .dmac-ri svg,
+.gateos-portal .dmac-pt svg,
+.gateos-portal .dmac-eye svg,
+.gateos-portal .dmac-b svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.gateos-portal .dmac-ri svg {
+  width: 17px;
+  height: 17px;
+}
+.gateos-portal .dmac-pt svg {
+  width: 14px;
+  height: 14px;
+  margin-right: 6px;
+}
+.gateos-portal .dmac-eye svg {
+  width: 16px;
+  height: 16px;
+  display: block;
+}
+.gateos-portal .dmac-b svg {
+  width: 15px;
+  height: 15px;
+}
+
+.gateos-portal .dmac-rw small {
+  display: block;
+  font-size: 11.5px;
+  font-weight: 400;
+  color: var(--dmac-mute);
+}
+
+.gateos-portal .dmac-rw input[type="text"],
+.gateos-portal .dmac-rw input[type="password"],
+.gateos-portal .dmac-rw input[type="number"] {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: none;
+  font: inherit;
+  color: var(--dmac-ink);
+  text-align: right;
+  padding: 14px 0;
+}
+
+.gateos-portal .dmac-rw input::placeholder {
+  color: var(--dmac-mute);
+}
+
+.gateos-portal .dmac-rw:focus-within {
+  background: rgba(16, 185, 129, 0.07);
+  box-shadow: inset 3px 0 0 var(--dmac-g2);
+}
+
+.gateos-portal .dmac-rw.dmac-bad label,
+.gateos-portal .dmac-rw.dmac-bad .dmac-l {
+  color: #dc2626;
+}
+
+.gateos-portal .dmac-rw.dmac-bad {
+  background: rgba(220, 38, 38, 0.06);
+}
+
+.gateos-portal .dmac-sw-inp {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+  margin: 0;
+}
+
+.gateos-portal .dmac-eye {
+  border: 0;
+  background: var(--dmac-chip);
+  border-radius: 99px;
+  color: var(--dmac-mute);
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  flex: none;
+}
+
+.gateos-portal .dmac-sw {
+  margin-left: auto;
+  width: 50px;
+  height: 30px;
+  border-radius: 99px;
+  border: 0;
+  padding: 0;
+  background: rgba(120, 125, 145, 0.3);
+  position: relative;
+  cursor: pointer;
+  transition: background 0.25s;
+  flex: none;
+}
+
+.gateos-portal .dmac-sw::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  transition: transform 0.25s cubic-bezier(0.3, 1.4, 0.5, 1);
+}
+
+.gateos-portal .dmac-sw[aria-checked="true"] {
+  background: linear-gradient(var(--dmac-g1), var(--dmac-g2));
+}
+
+.gateos-portal .dmac-sw[aria-checked="true"]::after {
+  transform: translateX(20px);
+}
+
+.gateos-portal .dmac-foot {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 24px 18px;
+  border-top: 1px solid var(--dmac-line);
+}
+
+.gateos-portal .dmac-b {
+  font: inherit;
+  font-size: 13.5px;
+  font-weight: 600;
+  border: 1px solid var(--dmac-gb);
+  background: var(--dmac-group);
+  color: var(--dmac-ink);
+  padding: 9px 18px;
+  border-radius: 99px;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: transform 0.15s;
+}
+
+.gateos-portal .dmac-b:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.gateos-portal .dmac-b:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.gateos-portal .dmac-b.dmac-p {
+  background: linear-gradient(var(--dmac-g1), var(--dmac-g2));
+  border-color: transparent;
+  color: #fff;
+  box-shadow: 0 8px 18px -6px rgba(16, 185, 129, 0.6);
+}
+
+.gateos-portal .dmac-sp {
+  flex: 1;
+}
+
+.gateos-portal .dmac-res {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #0a9d63;
+  opacity: 0;
+  transition: opacity 0.3s;
+  max-width: 42%;
+  text-align: right;
+  line-height: 1.3;
+}
+
+.gateos-portal .dmac-res.dmac-on {
+  opacity: 1;
+}
+
+.gateos-portal .dmac-spin {
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  animation: dmac-spin 0.7s linear infinite;
+  display: inline-block;
+}
+
+@keyframes dmac-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.gateos-portal .dmac-load {
+  grid-column: 1 / -1;
+  padding: 64px;
+  text-align: center;
+  color: var(--dmac-mute);
+  font-size: 14px;
+}
+
+@media (max-width: 700px) {
+  .gateos-portal .dmac-modal {
+    grid-template-columns: 1fr;
+    overflow: auto;
+  }
+  .gateos-portal .dmac-side {
+    padding: 56px 18px 16px;
+  }
+  .gateos-portal .dmac-ports {
+    grid-template-columns: repeat(3, 1fr);
+    display: grid;
+  }
+  .gateos-portal .dmac-pt {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 9px 11px;
+  }
+  .gateos-portal .dmac-pt span {
+    margin: 0;
+    text-align: left;
+    font-size: 15px;
+  }
+  .gateos-portal .dmac-note {
+    display: none;
+  }
+  .gateos-portal .dmac-scroll {
+    overflow: visible;
+  }
+  .gateos-portal .dmac-rw label,
+  .gateos-portal .dmac-rw .dmac-l {
+    flex-basis: 40%;
+  }
+  .gateos-portal .dmac-foot {
+    flex-wrap: wrap;
+  }
+  .gateos-portal .dmac-res {
+    display: none;
+  }
+}

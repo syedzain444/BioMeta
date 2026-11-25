@@ -1,0 +1,1090 @@
+/* GateOS — desktop-style shell (login + portal) */
+
+.theme-os {
+    --os-font: "Segoe UI Variable", "Segoe UI", "Plus Jakarta Sans", system-ui, sans-serif;
+    --os-mono: "JetBrains Mono", ui-monospace, monospace;
+    --os-wall-1: #0a0e1a;
+    --os-wall-2: #121a2e;
+    --os-wall-3: #0d2818;
+    --os-glass: rgba(255, 255, 255, 0.78);
+    --os-glass-strong: rgba(255, 255, 255, 0.92);
+    --os-glass-dark: rgba(18, 22, 36, 0.82);
+    --os-glass-border: rgba(255, 255, 255, 0.45);
+    --os-blur: blur(22px) saturate(1.35);
+    --os-taskbar-h: 52px;
+    --os-menubar-h: 36px;
+    --os-dock-w: 72px;
+    --os-shadow-window: 0 12px 48px rgba(0, 0, 0, 0.28), 0 0 0 1px rgba(255, 255, 255, 0.08) inset;
+    --os-accent: #3b82f6;
+    --os-accent-soft: rgba(59, 130, 246, 0.18);
+    font-family: var(--os-font);
+}
+
+/* —— Wallpaper —— */
+.theme-os.portal-body .portal-app-bg,
+.theme-os.login-body .os-login-wallpaper {
+    background:
+        radial-gradient(ellipse 120% 80% at 15% 10%, rgba(59, 130, 246, 0.22), transparent 50%),
+        radial-gradient(ellipse 90% 70% at 85% 20%, rgba(16, 185, 129, 0.18), transparent 45%),
+        radial-gradient(ellipse 70% 60% at 50% 100%, rgba(139, 92, 246, 0.12), transparent 55%),
+        linear-gradient(165deg, var(--os-wall-1) 0%, var(--os-wall-2) 42%, var(--os-wall-3) 100%);
+}
+
+.theme-os.login-body {
+    margin: 0;
+    min-height: 100dvh;
+    overflow: hidden;
+    color: #e2e8f0;
+}
+
+.theme-os.login-body .portal-app-bg {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+}
+
+/* —— Menu bar —— */
+.os-menubar {
+    position: relative;
+    z-index: 20;
+    flex-shrink: 0;
+    height: var(--os-menubar-h);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 0.85rem 0 0.65rem;
+    background: rgba(12, 16, 28, 0.72);
+    backdrop-filter: var(--os-blur);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.88);
+    font-size: 0.78rem;
+    user-select: none;
+}
+
+.os-menubar-left,
+.os-menubar-right {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+}
+
+.os-menubar-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: 700;
+    font-size: 0.8rem;
+    padding: 0.2rem 0.55rem;
+    border-radius: 6px;
+    color: #fff;
+}
+
+.os-menubar-logo i {
+    color: #6ee7b7;
+}
+
+.os-menubar-menus {
+    display: flex;
+    gap: 0.15rem;
+}
+
+.os-menubar-menus span {
+    padding: 0.25rem 0.55rem;
+    border-radius: 6px;
+    color: rgba(255, 255, 255, 0.72);
+    cursor: default;
+}
+
+.os-menubar-menus span:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+}
+
+.os-menubar-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: rgba(167, 243, 208, 0.9);
+    font-size: 0.72rem;
+}
+
+.os-menubar-clock {
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+    font-size: 0.78rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.theme-os .portal-os-shell {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    height: 100dvh;
+    max-height: 100dvh;
+    overflow: hidden;
+}
+
+.theme-os .portal-os-shell > .portal-frame {
+    flex: 1;
+    min-height: 0;
+    height: auto;
+    max-height: none;
+}
+
+.theme-os .portal-sidebar-fixed {
+    height: 100%;
+    max-height: none;
+}
+
+.theme-os .portal-content-col {
+    height: 100%;
+    max-height: none;
+}
+
+/* —— Dock (sidebar) —— */
+.theme-os .portal-sidebar {
+    width: var(--os-dock-w);
+    min-width: var(--os-dock-w);
+    background: rgba(15, 20, 35, 0.55);
+    backdrop-filter: var(--os-blur);
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.15);
+    padding: 0.65rem 0.45rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.theme-os .portal-frame {
+    grid-template-columns: var(--os-dock-w) 1fr;
+}
+
+.theme-os .portal-brand {
+    flex-direction: column;
+    text-align: center;
+    padding: 0.5rem 0 0.85rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    width: 100%;
+}
+
+.theme-os .portal-brand-mark {
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+    margin: 0 auto;
+}
+
+.theme-os .portal-brand-title,
+.theme-os .portal-brand-sub {
+    display: none;
+}
+
+.theme-os .portal-nav {
+    width: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    padding: 0.5rem 0;
+}
+
+.theme-os .portal-nav-link {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.2rem;
+    padding: 0.55rem 0.25rem;
+    font-size: 0.58rem;
+    font-weight: 600;
+    text-align: center;
+    line-height: 1.15;
+    border-radius: 14px;
+    min-height: 56px;
+}
+
+.theme-os .portal-nav-link i {
+    font-size: 1.25rem;
+    margin: 0;
+}
+
+.theme-os .portal-nav-link.active::before {
+    display: none;
+}
+
+.theme-os .portal-nav-link.active {
+    background: rgba(59, 130, 246, 0.25);
+    box-shadow: 0 0 0 1px rgba(96, 165, 250, 0.35);
+    color: #93c5fd;
+}
+
+.theme-os .device-switcher {
+    width: 100%;
+    padding: 0.45rem 0.35rem;
+    margin: 0;
+    border-radius: 12px;
+}
+
+.theme-os .device-switcher-label {
+    font-size: 0.55rem;
+    text-align: center;
+    display: block;
+}
+
+.theme-os .device-switcher select {
+    width: 100%;
+    font-size: 0.62rem;
+    padding: 0.35rem 0.25rem;
+    margin-top: 0.25rem;
+}
+
+.theme-os .portal-sidebar-foot {
+    width: 100%;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding-top: 0.5rem;
+}
+
+.theme-os .portal-user-card {
+    flex-direction: column;
+    text-align: center;
+    padding: 0.35rem 0;
+}
+
+.theme-os .portal-user-card > div:last-child {
+    display: none;
+}
+
+.theme-os .btn-sidebar-out {
+    font-size: 0;
+    padding: 0.5rem;
+    border-radius: 12px;
+}
+
+.theme-os .btn-sidebar-out i {
+    font-size: 1rem;
+    margin: 0;
+}
+
+.theme-os .btn-sidebar-out::after {
+    content: none;
+}
+
+/* —— Desktop workspace —— */
+.theme-os .portal-content-col {
+    background: transparent;
+    position: relative;
+}
+
+.theme-os .portal-main-fluid {
+    background: transparent;
+    padding: 0.85rem 1.25rem calc(var(--os-taskbar-h) + 0.5rem);
+}
+
+.theme-os .portal-main-fluid::before {
+    content: "";
+    position: fixed;
+    inset: var(--os-menubar-h) var(--os-dock-w) var(--os-taskbar-h) 0;
+    pointer-events: none;
+    background-image: radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+    background-size: 28px 28px;
+    opacity: 0.5;
+    z-index: 0;
+}
+
+.theme-os .portal-page-layout {
+    position: relative;
+    z-index: 1;
+}
+
+/* —— Taskbar —— */
+.theme-os .portal-taskbar {
+    position: fixed;
+    left: var(--os-dock-w);
+    right: 0;
+    bottom: 0;
+    height: var(--os-taskbar-h);
+    z-index: 30;
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0 0.85rem;
+    background: rgba(10, 14, 26, 0.82);
+    backdrop-filter: var(--os-blur);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.2);
+}
+
+.theme-os .portal-topbar {
+    display: none;
+}
+
+.theme-os .os-taskbar-start {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    border: none;
+    background: linear-gradient(135deg, #2563eb, #3b82f6);
+    color: #fff;
+    display: grid;
+    place-items: center;
+    font-size: 1.15rem;
+    cursor: default;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
+}
+
+.theme-os .os-taskbar-apps {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    flex: 0 1 auto;
+    min-width: 0;
+}
+
+.theme-os .os-taskbar-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    min-width: 0;
+    padding: 0 0.5rem;
+}
+
+.theme-os .os-taskbar-center:empty {
+    display: none;
+}
+
+.theme-os .portal-taskbar .live-pill-topbar {
+    margin: 0;
+}
+
+.theme-os .os-taskbar-app {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.4rem 0.85rem;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #fff;
+    font-size: 0.78rem;
+    font-weight: 600;
+    max-width: 220px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.theme-os .os-taskbar-app i {
+    color: #6ee7b7;
+}
+
+.theme-os .os-taskbar-tray {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    margin-left: auto;
+}
+
+.theme-os .portal-taskbar .portal-topbar-pill {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.12);
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 0.72rem;
+    padding: 0.35rem 0.65rem;
+}
+
+.theme-os .portal-taskbar .portal-topbar-user {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.78rem;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 999px;
+    padding: 0.3rem 0.65rem 0.3rem 0.35rem;
+}
+
+.theme-os .portal-taskbar .portal-clock-widget {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #fff;
+    padding: 0.35rem 0.75rem;
+    border-radius: 10px;
+}
+
+.theme-os .portal-taskbar .portal-clock-date {
+    color: rgba(255, 255, 255, 0.65);
+    font-size: 0.68rem;
+}
+
+.theme-os .portal-taskbar .portal-clock-time {
+    color: #fff;
+    font-size: 0.85rem;
+}
+
+/* —— Window panels —— */
+.theme-os .panel-pro,
+.theme-os .filters-panel,
+.theme-os .enrolled-workbench {
+    background: var(--os-glass);
+    backdrop-filter: var(--os-blur);
+    border: 1px solid var(--os-glass-border);
+    box-shadow: var(--os-shadow-window);
+}
+
+.theme-os .enrolled-workbench-accent {
+    height: 3px;
+}
+
+.theme-os .enrolled-workbench-title h3,
+.theme-os .enrolled-workbench-title p {
+    color: inherit;
+}
+
+.theme-os .enrolled-nic-input {
+    background: rgba(255, 255, 255, 0.85);
+}
+
+.theme-os .portal-main-fluid:has(.portal-page-enrolled) {
+    overflow-y: auto;
+}
+
+.theme-os .panel-datatable {
+    border-radius: 14px;
+    overflow: hidden;
+    background: var(--os-glass-strong);
+    backdrop-filter: var(--os-blur);
+    border: 1px solid var(--os-glass-border);
+    box-shadow: var(--os-shadow-window);
+}
+
+.theme-os .panel-datatable .panel-head-pro {
+    position: relative;
+    padding-left: 4.25rem;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.35));
+    border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+}
+
+.theme-os .panel-datatable .panel-head-pro::before {
+    content: "";
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 54px;
+    height: 12px;
+    background:
+        radial-gradient(circle 5px at 6px 50%, #ff5f57 99%, transparent 100%),
+        radial-gradient(circle 5px at 22px 50%, #febc2e 99%, transparent 100%),
+        radial-gradient(circle 5px at 38px 50%, #28c840 99%, transparent 100%);
+    pointer-events: none;
+}
+
+.theme-os .portal-page-band {
+    background: var(--os-glass-dark);
+    backdrop-filter: var(--os-blur);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: var(--os-shadow-window);
+    padding-top: 2.35rem;
+}
+
+.theme-os .portal-page-band[data-os-title]::before {
+    content: "Gate Entry — " attr(data-os-title);
+    position: absolute;
+    left: 3.5rem;
+    top: 0.65rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.55);
+    letter-spacing: 0.02em;
+}
+
+.theme-os .portal-page-band::after {
+    content: "";
+    position: absolute;
+    left: 1.15rem;
+    top: 0.72rem;
+    width: 54px;
+    height: 12px;
+    background:
+        radial-gradient(circle 5px at 6px 50%, #ff5f57 99%, transparent 100%),
+        radial-gradient(circle 5px at 22px 50%, #febc2e 99%, transparent 100%),
+        radial-gradient(circle 5px at 38px 50%, #28c840 99%, transparent 100%);
+}
+
+.theme-os .stat-card-pro {
+    backdrop-filter: var(--os-blur);
+    box-shadow: var(--os-shadow-window);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.theme-os .filters-on-light,
+.theme-os .filters-panel {
+    color: var(--text);
+}
+
+/* —— Login desktop —— */
+.os-login-desktop {
+    position: relative;
+    z-index: 1;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+}
+
+.os-login-wallpaper {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+}
+
+.os-login-center {
+    flex: 1;
+    display: grid;
+    place-items: center;
+    padding: calc(var(--os-menubar-h) + 1rem) 1rem 3rem;
+}
+
+.os-window {
+    width: min(420px, 94vw);
+    border-radius: 14px;
+    overflow: hidden;
+    background: var(--os-glass-strong);
+    backdrop-filter: var(--os-blur);
+    border: 1px solid var(--os-glass-border);
+    box-shadow: var(--os-shadow-window);
+    animation: osWindowIn 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes osWindowIn {
+    from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+.os-window-titlebar {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.55rem 0.85rem;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.65), rgba(255, 255, 255, 0.4));
+    border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+}
+
+.os-window-controls {
+    display: flex;
+    gap: 7px;
+}
+
+.os-window-controls span {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    display: block;
+}
+
+.os-window-controls .os-ctl-close { background: #ff5f57; }
+.os-window-controls .os-ctl-min { background: #febc2e; }
+.os-window-controls .os-ctl-max { background: #28c840; }
+
+.os-window-title {
+    flex: 1;
+    text-align: center;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #475569;
+    margin-right: 52px;
+}
+
+.os-window-body {
+    padding: 1.35rem 1.5rem 1.5rem;
+    color: #0f172a;
+}
+
+.os-window-body .login-header {
+    text-align: center;
+    margin-bottom: 1.15rem;
+}
+
+.os-window-body .login-icon {
+    width: 52px;
+    height: 52px;
+    margin: 0 auto 0.65rem;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #2563eb, #3b82f6);
+    color: #fff;
+    display: grid;
+    place-items: center;
+    font-size: 1.5rem;
+    box-shadow: 0 8px 24px rgba(37, 99, 235, 0.35);
+}
+
+.os-window-body .login-header h1 {
+    margin: 0 0 0.25rem;
+    font-size: 1.2rem;
+    color: #0f172a;
+}
+
+.os-window-body .login-header p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #64748b;
+}
+
+.theme-os .btn-signin {
+    background: linear-gradient(135deg, #2563eb, #3b82f6);
+    box-shadow: 0 8px 22px rgba(37, 99, 235, 0.35);
+}
+
+.theme-os .setup-form .field-label,
+.theme-os .setup-form label.field-label {
+    display: block;
+    margin-bottom: 0.85rem;
+}
+
+.theme-os .setup-form .field-label > span:first-child,
+.theme-os .setup-form label.field-label > span:first-child {
+    display: block;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #334155;
+    margin-bottom: 0.35rem;
+}
+
+.theme-os .setup-form input,
+.theme-os .login-form label.field-label > input {
+    width: 100%;
+    padding: 0.55rem 0.65rem;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    font-family: inherit;
+    font-size: 0.9rem;
+}
+
+.os-login-dock {
+    position: fixed;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.45rem 0.85rem;
+    border-radius: 999px;
+    background: rgba(10, 14, 26, 0.65);
+    backdrop-filter: var(--os-blur);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    font-size: 0.72rem;
+    color: rgba(255, 255, 255, 0.75);
+    z-index: 5;
+}
+
+.os-login-dock i {
+    color: #6ee7b7;
+}
+
+.theme-os .login-card:not(.os-window) {
+    border-radius: 14px;
+    background: var(--os-glass-strong);
+    backdrop-filter: var(--os-blur);
+    box-shadow: var(--os-shadow-window);
+    max-width: 420px;
+    margin: 2rem auto;
+    padding: 0;
+    overflow: hidden;
+}
+
+.theme-os .access-denied-card .login-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    margin-top: 1rem;
+}
+
+/* —— Boot / welcome overlays —— */
+.theme-os .portal-boot {
+    background: linear-gradient(165deg, #050810, #0f172a 50%, #0a1628);
+}
+
+.theme-os .portal-boot-inner h1 {
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+.theme-os .portal-boot-logo {
+    background: linear-gradient(135deg, #2563eb, #10b981);
+    box-shadow: 0 0 60px rgba(59, 130, 246, 0.35);
+}
+
+.theme-os .portal-welcome-card {
+    background: var(--os-glass-dark);
+    backdrop-filter: var(--os-blur);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 16px;
+}
+
+.theme-os .alert-banner {
+    border-radius: 12px;
+    backdrop-filter: var(--os-blur);
+}
+
+@media (max-width: 768px) {
+    .theme-os .portal-frame {
+        grid-template-columns: 1fr;
+    }
+
+    .theme-os .portal-sidebar {
+        width: 100%;
+        min-width: 0;
+        flex-direction: row;
+        flex-wrap: wrap;
+        height: auto;
+        max-height: none;
+    }
+
+    .theme-os .portal-nav {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .theme-os .portal-taskbar {
+        left: 0;
+    }
+
+    .theme-os .portal-main-fluid {
+        padding-bottom: calc(var(--os-taskbar-h) + 1rem);
+    }
+
+    .os-menubar-menus {
+        display: none;
+    }
+}
+
+/* ═══ #151b28 + white shell (Dock + top bar + device menu) ═══ */
+
+.theme-teal {
+    --mac-dock-w: 248px;
+    --shell-dark: #151b28;
+    --shell-dark-mid: #1a2234;
+    --shell-dark-soft: #172033;
+    --bg: #f4f7fe;
+    --bg-soft: #eef2fb;
+    --accent: #151b28;
+    --accent-bright: #2d3748;
+    --accent-soft: rgba(21, 27, 40, 0.08);
+    --sidebar-bg: #151b28;
+    --sidebar-active: #6ee7b7;
+    --os-glass: rgba(255, 255, 255, 0.88);
+    --os-blur: blur(20px) saturate(1.2);
+}
+
+.theme-teal.portal-body .portal-app-bg,
+.theme-teal.login-body .os-login-wallpaper {
+    background:
+        radial-gradient(ellipse 70% 50% at 10% 0%, rgba(21, 27, 40, 0.06), transparent 55%),
+        radial-gradient(ellipse 50% 40% at 95% 5%, rgba(21, 27, 40, 0.04), transparent 50%),
+        linear-gradient(180deg, #ffffff 0%, var(--bg) 50%, #ffffff 100%);
+}
+
+.theme-teal .portal-content-col {
+    background: var(--bg);
+}
+
+/* Top bar glass: portal-topbar-glass.css */
+
+.theme-teal .portal-frame.mac-desktop {
+    grid-template-columns: var(--mac-dock-w) minmax(0, 1fr);
+}
+
+.theme-teal .portal-main-fluid {
+    padding: 0.85rem 1.35rem 1.25rem;
+}
+
+.theme-teal .portal-main-fluid::before {
+    display: none;
+}
+
+.theme-teal .mac-dock-left.portal-sidebar {
+    width: var(--mac-dock-w);
+    min-width: var(--mac-dock-w);
+    background: #151b28 !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 4px 0 28px rgba(21, 27, 40, 0.25);
+}
+
+.theme-teal .portal-brand-mark {
+    background: linear-gradient(135deg, #151b28, #243044) !important;
+    box-shadow: 0 8px 20px rgba(21, 27, 40, 0.45);
+    color: #a7f3d0;
+}
+
+/* Dock nav layout: see portal-dock-nav.css */
+
+.theme-teal .portal-topbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    flex-wrap: wrap;
+}
+
+/* Device menu on glass topbar: portal-topbar-glass.css */
+
+.theme-teal .panel-pro,
+.theme-teal .panel-datatable,
+.theme-teal .enrolled-workbench {
+    background: #ffffff;
+    border: 1px solid rgba(21, 27, 40, 0.08);
+    box-shadow: 0 8px 32px rgba(21, 27, 40, 0.06);
+}
+
+/* Page band: portal-page-band.css */
+
+.theme-teal .mac-device-icon {
+    background: #151b28 !important;
+    color: #6ee7b7;
+}
+
+.theme-teal .mac-device-option-icon {
+    background: #151b28 !important;
+    color: #6ee7b7;
+}
+
+.theme-teal .btn-signin,
+.theme-teal .mac-btn-primary {
+    background: #151b28 !important;
+    box-shadow: 0 8px 22px rgba(21, 27, 40, 0.28);
+}
+
+.theme-teal .btn-signin:hover,
+.theme-teal .mac-btn-primary:hover {
+    background: #1e293b !important;
+}
+
+.theme-teal .login-topbar {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.theme-teal .login-topbar-hint {
+    font-size: 0.82rem;
+    color: #64748b;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.theme-teal .os-login-center {
+    padding-top: 1.5rem;
+}
+
+/* Device menu (menu bar) */
+.mac-device-menu {
+    position: relative;
+}
+
+.mac-device-trigger,
+.mac-device-menu--empty {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.25rem 0.55rem 0.25rem 0.35rem;
+    border-radius: 10px;
+    border: 0.5px solid rgba(0, 0, 0, 0.1);
+    background: rgba(255, 255, 255, 0.55);
+    cursor: pointer;
+    font-family: inherit;
+    text-align: left;
+    max-width: min(280px, 42vw);
+    transition: background 0.15s ease, box-shadow 0.15s ease;
+}
+
+.mac-device-trigger:hover {
+    background: rgba(255, 255, 255, 0.75);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+
+.mac-device-menu--empty {
+    cursor: default;
+    opacity: 0.85;
+}
+
+.mac-device-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 9px;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(145deg, #151b28, #1e293b);
+    color: #6ee7b7;
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+.mac-device-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 0.05rem;
+    min-width: 0;
+}
+
+.mac-device-name {
+    font-size: 12px;
+    font-weight: 700;
+    color: rgba(0, 0, 0, 0.88);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.mac-device-ip {
+    font-size: 10px;
+    font-family: var(--os-mono, ui-monospace, monospace);
+    color: rgba(0, 0, 0, 0.45);
+}
+
+.mac-device-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.mac-device-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.mac-device-status--live {
+    color: #047857;
+}
+
+.mac-device-status--live .mac-device-dot {
+    background: #10b981;
+    box-shadow: 0 0 8px rgba(16, 185, 129, 0.85);
+    animation: macLivePulse 2s ease-in-out infinite;
+}
+
+.mac-device-status--off {
+    color: #64748b;
+}
+
+.mac-device-status--off .mac-device-dot {
+    background: #94a3b8;
+}
+
+@keyframes macLivePulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.55; }
+}
+
+.mac-device-chevron {
+    font-size: 11px;
+    opacity: 0.5;
+    flex-shrink: 0;
+}
+
+.mac-device-panel {
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    min-width: 300px;
+    max-width: min(360px, 92vw);
+    padding: 0.5rem;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: var(--os-blur);
+    border: 0.5px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.18);
+    z-index: 200;
+}
+
+.mac-device-panel-title {
+    margin: 0.25rem 0.5rem 0.35rem;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #64748b;
+}
+
+.mac-device-option {
+    margin: 0;
+}
+
+.mac-device-option-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.5rem 0.55rem;
+    border: none;
+    border-radius: 10px;
+    background: transparent;
+    cursor: pointer;
+    font-family: inherit;
+    text-align: left;
+}
+
+.mac-device-option-btn:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.mac-device-option.is-selected .mac-device-option-btn {
+    background: rgba(16, 185, 129, 0.12);
+}
+
+.mac-device-option-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    background: #151b28;
+    color: #6ee7b7;
+}
+
+.mac-device-option-text {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.mac-device-option-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: #0f172a;
+}
+
+.mac-device-option-ip {
+    font-size: 11px;
+    color: #64748b;
+    font-family: var(--os-mono, ui-monospace, monospace);
+}
+
+@media (max-width: 900px) {
+    .theme-teal .portal-frame.mac-desktop {
+        grid-template-columns: 1fr;
+    }
+
+    .theme-teal .mac-dock-left.portal-sidebar {
+        width: 100%;
+        min-width: 0;
+        max-height: none;
+    }
+
+    .mac-device-copy .mac-device-ip {
+        display: none;
+    }
+}

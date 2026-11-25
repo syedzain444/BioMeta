@@ -1,0 +1,110 @@
+@using BiometricDashboard.Web.Models
+@{
+    ViewData["Title"] = "Employee photos";
+    ViewData["GateosEmployeePhotos"] = true;
+    Layout = "_DashboardLayout";
+    var band = ViewBag.PageBand as PortalPageBandViewModel;
+    var deviceLabel = ViewBag.DeviceLabel as string ?? "No device selected";
+    var initialQuery = ViewBag.InitialQuery as string ?? "";
+}
+<input type="hidden" id="filterDeviceId" value="@(ViewBag.DeviceId != null ? ViewBag.DeviceId.ToString() : "")" />
+<script type="application/json" id="devicesJson">@Html.Raw(ViewBag.DevicesJson)</script>
+
+<section class="gateos-window dep-window" aria-label="Employee photo gallery">
+    <div class="gateos-titlebar dep-titlebar">
+        <div class="gateos-lights" aria-hidden="true"><i></i><i></i><i></i></div>
+        <h2>Employee photos — <span id="depTitleDev">@deviceLabel</span></h2>
+        <a class="dep-link-enrolled" href="@Url.Action("Index", "DeviceEnrolledUsers")">Device users →</a>
+    </div>
+
+    <div class="dep-content">
+        @if (band != null)
+        {
+            @await Html.PartialAsync("_PortalPageBand", band)
+        }
+
+        <div class="dep-stage">
+            <aside class="dep-panel dep-panel-side" aria-label="Search">
+                <div class="dep-glass-card">
+                    <header class="dep-card-head">
+                        <span class="dep-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+                        </span>
+                        <div>
+                            <h3>Search</h3>
+                            <p>NIC / employee ID, or name from Oracle registry</p>
+                        </div>
+                    </header>
+                    <div class="dep-field">
+                        <label class="dep-lbl" for="depDeviceSelect">Terminal</label>
+                        <select class="dep-sel" id="depDeviceSelect" aria-label="Terminal">
+                            <option value="">— Select device —</option>
+                        </select>
+                    </div>
+                    <div class="dep-field">
+                        <label class="dep-lbl" for="depPhotoQuery">Employee</label>
+                        <input class="dep-inp" id="depPhotoQuery" type="search" placeholder="4220112345671 or Ali…" value="@initialQuery" autocomplete="off" />
+                    </div>
+                    <button type="button" class="dep-btn dep-btn-main" id="btnDepLookup">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.7 2.7L3 8"/><path d="M3 3v5h5"/></svg>
+                        Fetch from device
+                    </button>
+                    <p id="depPhotoStatus" class="dep-status" role="status" hidden></p>
+                    <div id="depPhotoMatches" class="dep-matches" hidden></div>
+                    <details class="dep-tip">
+                        <summary>Why is photo missing?</summary>
+                        <p>Device stores <code>face_data</code> (template) for recognition. A visible JPEG needs <strong>大头照</strong> saved on the terminal — then <code>photo_data</code> appears in <code>GetEmployee</code>.</p>
+                    </details>
+                </div>
+
+                <div class="dep-glass-card dep-recent">
+                    <header class="dep-card-head">
+                        <span class="dep-icon dep-icon-violet" aria-hidden="true">
+                            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                        </span>
+                        <div>
+                            <h3>Recent</h3>
+                            <p>On this browser</p>
+                        </div>
+                    </header>
+                    <ul class="dep-recent-list" id="depRecentList" aria-label="Recent lookups"></ul>
+                    <button type="button" class="dep-btn dep-btn-ghost" id="btnDepClearRecent" hidden>Clear history</button>
+                </div>
+            </aside>
+
+            <div class="dep-panel dep-panel-hero" aria-live="polite">
+                <div class="dep-orbit" aria-hidden="true"></div>
+                <div class="dep-frame-wrap" id="depFrameWrap">
+                    <div class="dep-frame dep-frame-idle" id="depFrameIdle">
+                        <div class="dep-silhouette">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 20a8 8 0 0 1 16 0"/></svg>
+                        </div>
+                        <p>Search an employee to load their profile photo from the terminal.</p>
+                    </div>
+                    <img class="dep-frame-img" id="depPhotoImg" alt="" width="320" height="320" hidden />
+                    <div class="dep-frame-dep-placeholder" id="depPhotoPlaceholder" hidden>
+                        <span class="dep-badge-warn">No display photo</span>
+                        <p id="depPhotoPlaceholderText"></p>
+                    </div>
+                </div>
+
+                <div class="dep-hero-meta" id="depHeroMeta" hidden>
+                    <div class="dep-name-block">
+                        <span class="dep-eyebrow">Employee</span>
+                        <h1 id="depPhotoName">—</h1>
+                        <code id="depPhotoId" class="dep-nic">—</code>
+                    </div>
+                    <div class="dep-chips">
+                        <span class="dep-chip" id="depPhotoFaces">Face —</span>
+                        <span class="dep-chip" id="depPhotoBio">Bio —</span>
+                        <span class="dep-chip dep-chip-device" id="depPhotoDevice">—</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script src="~/js/device-employee-photos.js" asp-append-version="true"></script>
+}

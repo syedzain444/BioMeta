@@ -1,0 +1,178 @@
+@using BiometricDashboard.Core.Entities
+@{
+    ViewData["Title"] = "Enrollment sync";
+    ViewData["GateosEnrollmentSync"] = true;
+    Layout = "_DashboardLayout";
+    var band = ViewBag.PageBand as BiometricDashboard.Web.Models.PortalPageBandViewModel;
+    var deviceList = ViewBag.Devices as IReadOnlyList<BiometricDevice> ?? Array.Empty<BiometricDevice>();
+    var canRun = ViewBag.CanRun as bool? == true;
+}
+
+<div class="des-root" id="desRoot">
+    <header class="des-hero">
+        <div class="des-hero-text">
+            <span class="des-eyebrow">Multi-device enrollment</span>
+            <h1>Device-to-device sync</h1>
+            <p>Copy users enrolled on one terminal to another with face templates when HDCP provides them.</p>
+        </div>
+        <div class="des-hero-actions">
+            <a class="des-link" href="@Url.Action("Index", "DeviceEnrollmentHub")"><i class="bi bi-layers"></i> Enrollment hub</a>
+            <a class="des-link" href="@Url.Action("Index", "DeviceEnrolledUsers")"><i class="bi bi-person-vcard"></i> Device users</a>
+        </div>
+    </header>
+
+  @if (band != null)
+    {
+        <div class="des-band-wrap">
+            @await Html.PartialAsync("_PortalPageBand", band)
+        </div>
+    }
+
+    <nav class="des-steps" aria-label="Sync steps">
+        <div class="des-step des-step-on" data-step="1"><span>1</span> Devices</div>
+        <div class="des-step" data-step="2"><span>2</span> Compare</div>
+        <div class="des-step" data-step="3"><span>3</span> Select</div>
+        <div class="des-step" data-step="4"><span>4</span> Sync</div>
+    </nav>
+
+    <div class="des-panels">
+        <section class="des-panel des-panel-active" id="desPanel1" aria-labelledby="desStep1">
+            <h2 class="des-h2">Choose source and target</h2>
+            <p class="des-muted">Source = where users are already enrolled. Target = where you want them copied.</p>
+            <div class="des-device-row">
+                <div class="des-device-col">
+                    <label class="des-label" for="desSource">Source device</label>
+                    <select id="desSource" class="des-select">
+                        <option value="">— Select —</option>
+                        @foreach (var d in deviceList.OrderBy(x => x.DeviceName))
+                        {
+                            <option value="@d.DeviceId" data-ip="@d.DeviceIp">@d.DeviceName · @d.DeviceIp</option>
+                        }
+                    </select>
+                </div>
+                <div class="des-arrow" aria-hidden="true"><i class="bi bi-arrow-right"></i></div>
+                <div class="des-device-col">
+                    <label class="des-label" for="desTarget">Target device</label>
+                    <select id="desTarget" class="des-select">
+                        <option value="">— Select —</option>
+                        @foreach (var d in deviceList.OrderBy(x => x.DeviceName))
+                        {
+                            <option value="@d.DeviceId" data-ip="@d.DeviceIp">@d.DeviceName · @d.DeviceIp</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="des-footer-actions">
+                <button type="button" class="des-btn des-btn-primary" id="desBtnCompare" disabled>
+                    <i class="bi bi-intersect"></i> Compare devices
+                </button>
+                <span class="des-status" id="desStatus1" role="status"></span>
+            </div>
+        </section>
+
+        <section class="des-panel" id="desPanel2" hidden>
+            <h2 class="des-h2">Comparison result</h2>
+            <div class="des-stat-grid" id="desStatGrid">
+                <article class="des-stat"><span class="des-stat-k">On source</span><strong id="desStSource">—</strong></article>
+                <article class="des-stat"><span class="des-stat-k">On target</span><strong id="desStTarget">—</strong></article>
+                <article class="des-stat des-stat-accent"><span class="des-stat-k">Missing on target</span><strong id="desStMissing">—</strong></article>
+                <article class="des-stat"><span class="des-stat-k">Already on both</span><strong id="desStBoth">—</strong></article>
+            </div>
+            <p class="des-warn" id="desPreviewWarn" hidden></p>
+            <p class="des-dup-note" id="desDupNote">
+                <i class="bi bi-shield-check"></i> Only <strong>missing on target</strong> users can be copied. Same employee ID on both devices is never uploaded twice.
+            </p>
+            <details class="des-dup-details" id="desDupDetails" hidden>
+                <summary>Already on both (<span id="desDupCount">0</span>) — skipped</summary>
+                <ul class="des-dup-list" id="desDupList"></ul>
+            </details>
+            <div class="des-footer-actions">
+                <button type="button" class="des-btn des-btn-ghost" id="desBack1">Back</button>
+                <button type="button" class="des-btn des-btn-primary" id="desToSelect">
+                    Continue to selection <i class="bi bi-chevron-right"></i>
+                </button>
+            </div>
+        </section>
+
+        <section class="des-panel" id="desPanel3" hidden>
+            <div class="des-toolbar-row">
+                <h2 class="des-h2">Users to copy</h2>
+                <label class="des-check des-check-inline">
+                    <input type="checkbox" id="desChkAll" checked /> Select all missing
+                </label>
+                <label class="des-check des-check-inline">
+                    <input type="checkbox" id="desFaceOnly" checked /> Only with face on source
+                </label>
+            </div>
+            <div class="des-table-wrap">
+                <table class="des-table" id="desTable">
+                    <thead>
+                        <tr>
+                            <th style="width:2.5rem"></th>
+                            <th>Employee ID</th>
+                            <th>Name</th>
+                            <th>Department</th>
+                            <th>Face</th>
+                        </tr>
+                    </thead>
+                    <tbody id="desTbody"></tbody>
+                </table>
+            </div>
+            <p class="des-muted">Up to 300 users per sync job.</p>
+            <div class="des-footer-actions">
+                <button type="button" class="des-btn des-btn-ghost" id="desBack2">Back</button>
+                @if (canRun)
+                {
+                    <button type="button" class="des-btn des-btn-accent" id="desBtnSync" disabled>
+                        <i class="bi bi-cloud-upload"></i> Start sync to target
+                    </button>
+                }
+                else
+                {
+                    <span class="des-muted">You need <code>device_enroll_sync.run</code> permission to sync.</span>
+                }
+            </div>
+        </section>
+
+        <section class="des-panel" id="desPanel4" hidden>
+            <h2 class="des-h2">Sync complete</h2>
+            <div class="des-result-card" id="desResultCard">
+                <div class="des-result-icon" id="desResultIcon"><i class="bi bi-check-lg"></i></div>
+                <p class="des-result-title" id="desResultTitle">—</p>
+                <p class="des-result-log" id="desResultLog"></p>
+                <ul class="des-result-lines" id="desResultLines"></ul>
+            </div>
+            <div class="des-summary-compare" id="desSummaryCompare" hidden>
+                <h3 class="des-h3">Comparison summary</h3>
+                <p class="des-muted" id="desSummarySub"></p>
+                <div class="des-compare-grid">
+                    <div class="des-compare-col">
+                        <span class="des-compare-label">Before sync</span>
+                        <div class="des-mini-stats" id="desBeforeStats"></div>
+                    </div>
+                    <div class="des-compare-col des-compare-col-after">
+                        <span class="des-compare-label">After sync (refreshed)</span>
+                        <div class="des-mini-stats" id="desAfterStats"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="des-footer-actions">
+                <button type="button" class="des-btn des-btn-primary" id="desAnother">Sync another pair</button>
+            </div>
+        </section>
+    </div>
+
+    <div class="des-overlay" id="desOverlay" hidden aria-live="polite" aria-busy="true">
+        <div class="des-loader-card">
+            <div class="des-spinner" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+            <p class="des-loader-title" id="desLoaderTitle">Working…</p>
+            <p class="des-loader-sub" id="desLoaderSub"></p>
+            <div class="des-progress"><span id="desProgressBar"></span></div>
+            <p class="des-loader-log" id="desLoaderLog"></p>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/device-enrollment-sync.js" asp-append-version="true"></script>
+}

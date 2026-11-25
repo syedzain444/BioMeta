@@ -1,0 +1,100 @@
+@model BiometricDashboard.Web.Models.PortalPageBandViewModel
+@{
+    string StatTone(int colorIndex) => colorIndex switch
+    {
+        2 => "o",
+        3 => "i",
+        4 => "p",
+        _ => "g",
+    };
+    var statCount = Model.Stats.Count > 0 ? Math.Min(Model.Stats.Count, 4) : 0;
+}
+<div class="portal-page-head-band">
+    <div class="gph-top-row" style="@(statCount > 0 ? $"--gph-stat-count: {statCount};" : "grid-template-columns: 1fr;")">
+        <div class="gph-hero">
+            @if (!string.IsNullOrWhiteSpace(Model.Eyebrow))
+            {
+                <span class="gph-tag"><i aria-hidden="true"></i>@Model.Eyebrow</span>
+            }
+            <div class="gph-hero-row">
+                <div class="gph-hero-ic" aria-hidden="true">
+                    <i class="bi @Model.IconClass"></i>
+                </div>
+                <h1>@Model.Title</h1>
+                @if (!string.IsNullOrEmpty(Model.PrimaryActionUrl))
+                {
+                    <a class="gph-hero-action" href="@Model.PrimaryActionUrl">
+                        <i class="bi @Model.PrimaryActionIcon" aria-hidden="true"></i>@Model.PrimaryActionText
+                    </a>
+                }
+                else if (ViewData["PageBandActions"] is Microsoft.AspNetCore.Html.IHtmlContent actions)
+                {
+                    <div class="gph-hero-action-slot">@actions</div>
+                }
+            </div>
+            @if (!string.IsNullOrWhiteSpace(Model.SubtitleEmElementId))
+            {
+                <p>
+                    @if (!string.IsNullOrWhiteSpace(Model.Subtitle))
+                    {
+                        @Html.Raw(Model.Subtitle)
+                    }
+                    else
+                    {
+                        <text>Active device: <em id="@Model.SubtitleEmElementId">@(Model.SubtitleEmText ?? "—")</em></text>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.SubtitleMuted))
+                    {
+                        <br />@Model.SubtitleMuted
+                    }
+                </p>
+            }
+            else if (!string.IsNullOrWhiteSpace(Model.Subtitle) || !string.IsNullOrWhiteSpace(Model.SubtitleMuted))
+            {
+                <p>
+                    @if (!string.IsNullOrWhiteSpace(Model.Subtitle))
+                    {
+                        @Html.Raw(Model.Subtitle)
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.SubtitleMuted))
+                    {
+                        @if (!string.IsNullOrWhiteSpace(Model.Subtitle))
+                        {
+                            <br />
+                        }
+                        @Model.SubtitleMuted
+                    }
+                </p>
+            }
+        </div>
+        @foreach (var s in Model.Stats)
+        {
+            <div class="gph-stat @StatTone(s.ColorIndex)">
+                <div class="k">@s.Label</div>
+                @if (!string.IsNullOrEmpty(s.ValueElementId))
+                {
+                    <div class="v" id="@s.ValueElementId">@s.Value</div>
+                }
+                else
+                {
+                    <div class="v">@s.Value</div>
+                }
+                @if (!string.IsNullOrEmpty(s.Meta))
+                {
+                    if (!string.IsNullOrEmpty(s.MetaElementId))
+                    {
+                        <div class="s" id="@s.MetaElementId">@Html.Raw(s.Meta)</div>
+                    }
+                    else
+                    {
+                        <div class="s">@Html.Raw(s.Meta)</div>
+                    }
+                }
+                <div class="ico" aria-hidden="true"><i class="bi @s.IconClass"></i></div>
+                <svg class="gph-wave" viewBox="0 0 300 24" preserveAspectRatio="none" aria-hidden="true">
+                    <path d="M0 14C60 0 110 24 170 12S260 2 300 10V24H0z" />
+                </svg>
+            </div>
+        }
+    </div>
+</div>

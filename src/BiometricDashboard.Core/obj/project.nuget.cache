@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "ElN/qZPTlD0=",
+  "success": true,
+  "projectFilePath": "D:\\Zain BTK Projects\\BioMeta\\src\\BiometricDashboard.Core\\BiometricDashboard.Core.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\8.0.34\\microsoft.windowsdesktop.app.ref.8.0.34.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.netcore.app.ref\\8.0.34\\microsoft.netcore.app.ref.8.0.34.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\8.0.34\\microsoft.aspnetcore.app.ref.8.0.34.nupkg.sha512"
+  ],
+  "logs": []
+}

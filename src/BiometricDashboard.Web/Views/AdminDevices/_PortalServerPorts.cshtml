@@ -1,0 +1,79 @@
+@model BiometricDashboard.Web.Models.PortalServerPortsViewModel
+<section class="gosw-window" aria-labelledby="goswWindowTitle">
+    <header class="gosw-titlebar">
+        <div class="gosw-lights" aria-hidden="true">
+            <span class="gosw-light gosw-light--close"></span>
+            <span class="gosw-light gosw-light--min"></span>
+            <span class="gosw-light gosw-light--max"></span>
+        </div>
+        <div class="gosw-title" id="goswWindowTitle">
+            <span class="gosw-title-icon"><i class="bi bi-hdd-network" aria-hidden="true"></i></span>
+            <span class="gosw-title-text">GateOS · Push &amp; network</span>
+        </div>
+        <div class="gosw-titlebar-end">
+            <span class="gosw-pill @(Model.PushServerEnabled ? "gosw-pill--live" : "gosw-pill--idle")">
+                <span class="gosw-pill-dot" aria-hidden="true"></span>
+                @(Model.PushServerEnabled ? "Listener active" : "Listener off")
+            </span>
+        </div>
+    </header>
+
+    <div class="gosw-toolbar">
+        <span class="gosw-toolbar-item"><i class="bi bi-diagram-3"></i> Sync <kbd>@Model.SyncMode</kbd></span>
+        <span class="gosw-toolbar-sep" aria-hidden="true"></span>
+        <span class="gosw-toolbar-item"><i class="bi bi-broadcast"></i> Bind <kbd>@Model.BindAddress</kbd></span>
+        <span class="gosw-toolbar-sep" aria-hidden="true"></span>
+        <span class="gosw-toolbar-item gosw-toolbar-item--muted"><i class="bi bi-shield-check"></i> Firewall: TCP @Model.CmdPort, @Model.HbpPort</span>
+    </div>
+
+    <div class="gosw-body">
+        <div class="gosw-pane gosw-pane--portal">
+            <header class="gosw-pane-head">
+                <span class="gosw-pane-badge"><i class="bi bi-pc-display"></i></span>
+                <div>
+                    <h3 class="gosw-pane-title">This portal PC</h3>
+                    <p class="gosw-pane-sub">Device pushes attendance here — set the same ports on the terminal.</p>
+                </div>
+            </header>
+            <div class="gosw-tiles">
+                <article class="gosw-tile gosw-tile--g">
+                    <div class="gosw-tile-top">
+                        <span class="gosw-tile-name">CMD port</span>
+                        <span class="gosw-tile-chip">Push</span>
+                    </div>
+                    <p class="gosw-tile-port">@Model.CmdPort</p>
+                    <p class="gosw-tile-desc">Commands &amp; record stream</p>
+                </article>
+                <article class="gosw-tile gosw-tile--i">
+                    <div class="gosw-tile-top">
+                        <span class="gosw-tile-name">HBP port</span>
+                        <span class="gosw-tile-chip">Push</span>
+                    </div>
+                    <p class="gosw-tile-port">@Model.HbpPort</p>
+                    <p class="gosw-tile-desc">Heartbeat &amp; bulk data</p>
+                </article>
+            </div>
+            <p class="gosw-pane-foot">
+                Terminal menu: <strong>Communication → Push to Server ON</strong> · Server IP = this PC’s LAN address
+            </p>
+        </div>
+
+        <div class="gosw-pane gosw-pane--device">
+            <header class="gosw-pane-head">
+                <span class="gosw-pane-badge gosw-pane-badge--device"><i class="bi bi-router"></i></span>
+                <div>
+                    <h3 class="gosw-pane-title">Each gate terminal</h3>
+                    <p class="gosw-pane-sub">Pull / test talks to the device IP — not the portal.</p>
+                </div>
+            </header>
+            <article class="gosw-tile gosw-tile--o gosw-tile--wide">
+                <div class="gosw-tile-top">
+                    <span class="gosw-tile-name">HDCP port</span>
+                    <span class="gosw-tile-chip gosw-tile-chip--pull">Pull</span>
+                </div>
+                <p class="gosw-tile-port">@Model.HdcpPort</p>
+                <p class="gosw-tile-desc">GetDeviceInfo · Test connection on add/edit</p>
+            </article>
+        </div>
+    </div>
+</section>

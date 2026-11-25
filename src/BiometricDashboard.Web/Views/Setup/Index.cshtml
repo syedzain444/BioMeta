@@ -1,0 +1,142 @@
+@model BiometricDashboard.Web.Models.DeviceFormViewModel
+
+@{
+
+    ViewData["Title"] = "Initial setup";
+
+    Layout = "_LoginLayout";
+
+    ViewData["BodyClass"] = "login-body-os";
+
+}
+
+
+
+<div class="os-login-wallpaper portal-app-bg" aria-hidden="true"></div>
+
+
+
+<div class="os-login-desktop">
+
+    <header class="os-menubar os-menubar--login" role="banner">
+
+        <div class="os-menubar-left">
+
+            <span class="os-menubar-logo"><i class="bi bi-fingerprint"></i> GateOS Setup</span>
+
+        </div>
+
+    </header>
+
+
+
+    <div class="os-login-center" style="align-items: flex-start; padding-top: 2rem;">
+
+        <div class="os-window setup-card" style="width: min(520px, 94vw);">
+
+            <div class="os-window-titlebar">
+
+                <div class="os-window-controls" aria-hidden="true">
+
+                    <span class="os-ctl-close"></span>
+
+                    <span class="os-ctl-min"></span>
+
+                    <span class="os-ctl-max"></span>
+
+                </div>
+
+                <span class="os-window-title">First-run setup — Device registration</span>
+
+            </div>
+
+            <div class="os-window-body">
+
+                <div class="login-header">
+
+                    <div class="login-icon"><i class="bi bi-router"></i></div>
+
+                    <h1>Initial setup</h1>
+
+                    <p>Register your first biometric terminal</p>
+
+                </div>
+
+                <div class="setup-hint">        <strong>Push mode (recommended)</strong> — portal listens on this PC (<code>9920</code>/<code>9924</code>); no extra push fields here.
+
+                    <ul>
+
+                        <li><strong>Below:</strong> terminal IP (e.g. <code>172.16.40.139</code>) and port <code>9922</code> (one-time connect test).</li>
+
+                        <li><strong>On the device MENU → Push:</strong> Push <strong>ON</strong>, Server IP = <strong>this PC</strong> (e.g. <code>172.16.40.14</code>) — not the terminal IP.</li>
+
+                    </ul>
+
+                </div>
+
+                <form asp-action="Index" method="post" class="login-form setup-form login-form-pro">
+
+                    @Html.AntiForgeryToken()
+
+                    <div asp-validation-summary="ModelOnly" class="validation-summary"></div>
+
+                    <label class="field-label">
+
+                        <span>Device IP</span>
+
+                        <input asp-for="DeviceIp" placeholder="172.16.40.139" />
+
+                    </label>
+
+                    <label class="field-label">
+
+                        <span>Port</span>
+
+                        <input asp-for="DevicePort" type="number" />
+
+                    </label>
+
+                    <label class="field-label">
+
+                        <span>Device admin ID</span>
+
+                        <input asp-for="AdminId" placeholder="e.g. 10492" />
+
+                    </label>
+
+                    <label class="field-label">
+
+                        <span>Device admin password</span>
+
+                        <input asp-for="AdminPassword" type="password" />
+
+                    </label>
+
+                    <label class="field-label">
+
+                        <span>Device name / alias</span>
+
+                        <input asp-for="DeviceName" placeholder="Main gate terminal" />
+
+                    </label>
+
+                    <label class="field-label">
+
+                        <span>Location</span>
+
+                        <input asp-for="DeviceLocation" placeholder="Heritage Club — Main entry" />
+
+                    </label>
+
+                    <button type="submit" class="btn-primary full btn-signin">Save &amp; continue to login</button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+

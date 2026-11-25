@@ -1,0 +1,178 @@
+@model BiometricDashboard.Web.Models.DeviceListViewModel
+@using System.Text.Json
+@using BiometricDashboard.Web.Models
+@{
+    ViewData["Title"] = "Devices";
+    ViewData["GateosAdminDevices"] = true;
+    ViewBag.ActiveNav = "AdminDevices";
+    var devices = Model.Devices;
+    var ports = Model.ServerPorts;
+    var canManage = User.HasClaim("permission", "devices.manage");
+    var online = devices.Count(d => d.IsOnline);
+    var syncPool = devices.Count(d => d.IsActive);
+    var errors = devices.Count(d => !string.IsNullOrEmpty(d.LastSyncError));
+    var listenerLabel = ports.PushServerEnabled ? "listener active" : "listener off";
+    var deviceBand = new PortalPageBandViewModel
+    {
+        Eyebrow = "Devices",
+        Title = "Biometric devices",
+        IconClass = "bi-person-bounding-box",
+        Subtitle = "Multiple terminals — sync runs for all <strong>active</strong> devices",
+        SubtitleMuted = $"Biometa · CMD {ports.CmdPort} · HBP {ports.HbpPort} · HDCP {ports.HdcpPort} · {listenerLabel}",
+        PrimaryActionUrl = canManage ? Url.Action("Create", "AdminDevices") : null,
+        PrimaryActionText = canManage ? "Add device" : null,
+        PrimaryActionIcon = "bi-plus-lg",
+        Stats =
+        [
+            new() { Label = "Terminals", Value = devices.Count.ToString(), Meta = "registered", IconClass = "bi-hdd-stack", ColorIndex = 1, ValueElementId = "adevNAll" },
+            new() { Label = "Online", Value = online.ToString(), Meta = "connected recently", IconClass = "bi-wifi", ColorIndex = 2, ValueElementId = "adevNOn" },
+            new() { Label = "Sync pool", Value = syncPool.ToString(), Meta = "portal active flag", IconClass = "bi-arrow-repeat", ColorIndex = 3, ValueElementId = "adevNSync" },
+            new() { Label = "Errors", Value = errors.ToString(), Meta = "need attention", IconClass = "bi-exclamation-triangle", ColorIndex = 4, ValueElementId = "adevNErr" },
+        ],
+    };
+    var deviceList = devices.Select(d => new
+    {
+        id = d.DeviceId,
+        name = d.DeviceName,
+        ip = d.DeviceIp,
+        port = d.DevicePort,
+        loc = d.DeviceLocation ?? "",
+        serial = string.IsNullOrEmpty(d.DeviceSerial) ? "—" : d.DeviceSerial,
+        primary = d.IsPrimary ? "Yes" : "—",
+        online = d.IsOnline,
+        active = d.IsActive,
+        lastSyncError = d.LastSyncError ?? "",
+        editUrl = Url.Action("Edit", "AdminDevices", new { id = d.DeviceId }),
+        deleteUrl = Url.Action("Delete", "AdminDevices", new { id = d.DeviceId }),
+    }).ToList();
+    var devicesJson = JsonSerializer.Serialize(deviceList);
+}
+
+<div id="devicesAntiForgery" hidden aria-hidden="true">
+    @Html.AntiForgeryToken()
+</div>
+
+<section class="gateos-window gov-win adev-win" aria-label="Devices">
+    <div class="gov-tb">
+        <div class="gov-lt" aria-hidden="true"><i></i><i></i><i></i></div>
+        <h2>Devices — Biometric terminals</h2>
+        <span></span>
+    </div>
+    <div class="adev-ct">
+    <div class="adev-wrap">
+        <div class="portal-page-head adev-page-head">
+            @await Html.PartialAsync("_PortalPageBand", deviceBand)
+        </div>
+
+        <div class="adev-net">
+            <b>Biometa · Push &amp; network</b>
+            <span class="adev-pill adev-p1"><small>CMD</small>@ports.CmdPort · push</span>
+            <span class="adev-pill adev-p2"><small>HBP</small>@ports.HbpPort · push</span>
+            <span class="adev-pill adev-p3"><small>HDCP</small>@ports.HdcpPort · pull</span>
+            <span class="adev-live @(ports.PushServerEnabled ? "" : "is-off")" id="adevListener">
+                @(ports.PushServerEnabled ? "Listener active" : "Listener off")
+            </span>
+        </div>
+
+        <div class="adev-screen">
+            <svg width="0" height="0" class="adev-sprite" aria-hidden="true">
+                <defs>
+                    <symbol id="adev-i-fp" viewBox="0 0 24 24"><path d="M12 11c0 3-.5 5-1.6 7M8 18.5c1.2-2 1.7-4.2 1.7-6.5a2.3 2.3 0 014.6 0c0 1.4-.1 2.7-.4 4M5.500 15c.4-1 .6-2 .6-3a5.900 5.900 0 0111.800-.4M4.500 8.500A8.500 8.500 0 0120 11c0 1.300-.1 2.500-.5 3.500"/></symbol>
+                    <symbol id="adev-i-pulse" viewBox="0 0 24 24"><path d="M3 12h4l3-8 4 16 3-8h4"/></symbol>
+                    <symbol id="adev-i-edit" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16z"/></symbol>
+                    <symbol id="adev-i-trash" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></symbol>
+                    <symbol id="adev-i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+                    <symbol id="adev-i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.500-3.500"/></symbol>
+                    <symbol id="adev-i-pin" viewBox="0 0 24 24"><path d="M12 21s7-6 7-11a7 7 0 10-14 0c0 5 7 11 7 11z"/><circle cx="12" cy="10" r="2.500"/></symbol>
+                </defs>
+            </svg>
+            <div class="adev-bar adev-glass">
+                <h2>Devices <em id="adevCnt">@devices.Count</em></h2>
+                <span class="adev-bar-sp" aria-hidden="true"></span>
+                <label class="adev-search-wrap">
+                    <svg aria-hidden="true"><use href="#adev-i-search"/></svg>
+                    <input class="adev-search" id="adevSearch" type="search" placeholder="Search devices…" aria-label="Search devices" />
+                </label>
+                @if (canManage)
+                {
+                    <button type="button" class="adev-btn" id="adevTestAll"><svg aria-hidden="true"><use href="#adev-i-pulse"/></svg>Test all</button>
+                    <button type="button" class="adev-btn pri" id="adevAddTop" data-device-add><svg aria-hidden="true"><use href="#adev-i-plus"/></svg>Add device</button>
+                }
+            </div>
+            <div class="adev-grid anim" id="adevGrid" data-can-manage="@(canManage ? "1" : "0")" aria-live="polite">
+                @foreach (var d in devices)
+                {
+                    var onClass = d.IsOnline ? "on" : "off";
+                    <article class="adev-app @onClass" data-device-id="@d.DeviceId"
+                         data-name="@d.DeviceName"
+                         data-ip="@d.DeviceIp"
+                         data-port="@d.DevicePort"
+                         data-loc="@(d.DeviceLocation ?? "")"
+                         data-serial="@(string.IsNullOrEmpty(d.DeviceSerial) ? "—" : d.DeviceSerial)"
+                         data-primary="@(d.IsPrimary ? "Yes" : "—")"
+                         data-online="@(d.IsOnline ? "true" : "false")"
+                         data-active="@(d.IsActive ? "true" : "false")"
+                         data-sync-error="@(d.LastSyncError ?? "")"
+                         data-edit-url="@Url.Action("Edit", "AdminDevices", new { id = d.DeviceId })"
+                         data-delete-url="@Url.Action("Delete", "AdminDevices", new { id = d.DeviceId })">
+                        <button type="button" class="adev-ico @onClass" data-open="@d.DeviceId" aria-label="Open @d.DeviceName">
+                            <svg aria-hidden="true"><use href="#adev-i-fp"/></svg>
+                            <span class="adev-dot" aria-hidden="true"></span>
+                        </button>
+                        <div class="adev-info">
+                            <div class="adev-nm">@d.DeviceName</div>
+                            <div class="adev-loc"><svg aria-hidden="true"><use href="#adev-i-pin"/></svg>@(string.IsNullOrWhiteSpace(d.DeviceLocation) ? "—" : d.DeviceLocation)</div>
+                            <span class="adev-ip">@d.DeviceIp:@d.DevicePort</span>
+                            <div class="adev-tags">
+                                <span class="adev-tag @(d.IsOnline ? "adev-t-on" : "adev-t-off")">@(d.IsOnline ? "Online" : "Offline")</span>
+                                <span class="adev-tag @(d.IsActive ? "adev-t-sync" : "adev-t-offpool")">@(d.IsActive ? "Sync" : "Inactive")</span>
+                            </div>
+                            @if (canManage)
+                            {
+                                <div class="adev-acts">
+                                    <button type="button" class="adev-act adev-a-t" data-test="@d.DeviceId" aria-label="Test"><svg aria-hidden="true"><use href="#adev-i-pulse"/></svg></button>
+                                    <button type="button" class="adev-act adev-a-e" data-edit="@d.DeviceId" aria-label="Edit"><svg aria-hidden="true"><use href="#adev-i-edit"/></svg></button>
+                                    <button type="button" class="adev-act adev-a-d" data-del="@d.DeviceId" aria-label="Delete"><svg aria-hidden="true"><use href="#adev-i-trash"/></svg></button>
+                                </div>
+                            }
+                        </div>
+                    </article>
+                }
+                @if (canManage)
+                {
+                    <article class="adev-app adev-add" tabindex="0">
+                        <button type="button" class="adev-ico" data-device-add aria-label="Add device">
+                            <svg aria-hidden="true"><use href="#adev-i-plus"/></svg>
+                        </button>
+                        <div class="adev-info">
+                            <div class="adev-nm">Add device</div>
+                            <div class="adev-loc">Register a new terminal</div>
+                        </div>
+                    </article>
+                }
+            </div>
+            <div class="adev-foot adev-glass" id="adevFoot">Showing @devices.Count of @devices.Count devices</div>
+        </div>
+    </div>
+    </div>
+</section>
+
+<div class="adev-sheet-bg" id="adevSheetBg" aria-hidden="true">
+    <div class="adev-sheet" id="adevSheet" role="dialog" aria-modal="true" aria-labelledby="adevModalTitle"></div>
+</div>
+<div class="adev-toast" id="adevToast" role="status"><span id="adevToastMsg"></span></div>
+
+<script type="application/json" id="adevDevicesJson">@Html.Raw(devicesJson)</script>
+
+@section Scripts {
+    <script>
+        window.adminDevicesConfig = {
+            canManage: @JsonSerializer.Serialize(canManage),
+            formBase: @JsonSerializer.Serialize(Url.Content("~/Admin/Devices/Form")),
+            saveUrl: @JsonSerializer.Serialize(Url.Content("~/Admin/Devices/Save")),
+            testDraftUrl: @JsonSerializer.Serialize(Url.Content("~/Admin/Devices/TestDraft")),
+            testBase: @JsonSerializer.Serialize(Url.Content("~/Admin/Devices/Test/"))
+        };
+    </script>
+    <script src="~/js/admin-devices.js" asp-append-version="true"></script>
+}

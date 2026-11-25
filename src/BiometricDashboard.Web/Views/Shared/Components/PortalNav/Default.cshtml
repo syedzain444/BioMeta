@@ -1,0 +1,17 @@
+@model IReadOnlyList<BiometricDashboard.Web.ViewComponents.NavItem>
+
+<nav class="portal-nav portal-dock-nav" aria-label="Main navigation">
+    @foreach (var item in Model)
+    {
+        <a class="portal-dock-link @(item.DockColorClass) @(item.IsActive ? "active" : "")"
+           href="@item.RoutePath"
+           title="@item.Name"
+           data-tip="@item.DockLabel"
+           data-module="@item.ModuleCode">
+            <span class="portal-dock-icon" aria-hidden="true">
+                <i class="bi @item.IconClass"></i>
+            </span>
+            <span class="portal-dock-label">@item.DockLabel</span>
+        </a>
+    }
+</nav>

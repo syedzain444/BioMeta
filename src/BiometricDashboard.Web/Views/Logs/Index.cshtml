@@ -1,0 +1,183 @@
+@using BiometricDashboard.Web.Models
+@{
+    ViewData["Title"] = "Attendance Logs";
+    ViewData["Title"] = "Attendance Logs";
+    Layout = "_DashboardLayout";
+    var band = ViewBag.PageBand as PortalPageBandViewModel;
+    var syncMode = ViewBag.SyncMode as string ?? "Push";
+}
+
+<div class="portal-page-layout logs-page">
+    <div class="portal-page-head">
+        @if (band != null)
+        {
+            @await Html.PartialAsync("_PortalPageBand", band)
+        }
+    </div>
+
+    <div class="logs-shell">
+        <aside class="logs-sidebar" aria-label="Filters and export">
+            <div class="logs-sidebar-card">
+                <header class="logs-sidebar-head">
+                    <i class="bi bi-sliders2"></i>
+                    <span>Filters</span>
+                </header>
+                <div class="logs-sidebar-body">
+                    <div class="logs-month-block logs-sidebar-tab-only" data-for-tab="device" hidden>
+                        <label class="logs-field">
+                            <span class="logs-field-label"><i class="bi bi-calendar3"></i> Month (GetRecord)</span>
+                            <input type="month" id="filterMonth" class="logs-field-input" title="Pick month — sets From/To to full month" />
+                        </label>
+                        <button type="button" id="btnApplyMonth" class="logs-btn logs-btn-ghost logs-btn-sm">
+                            <i class="bi bi-arrow-down-circle"></i> Apply month to dates
+                        </button>
+                        <div class="logs-month-quick" role="group" aria-label="Month presets">
+                            <button type="button" class="logs-month-chip" data-month-preset="this">This month</button>
+                            <button type="button" class="logs-month-chip" data-month-preset="last">Last month</button>
+                        </div>
+                        <p class="logs-export-hint">Load splits ranges &gt; 7 days into weekly GetRecord calls automatically.</p>
+                    </div>
+                    <label class="logs-field">
+                        <span class="logs-field-label"><i class="bi bi-calendar-event"></i> From date</span>
+                        <input type="date" id="fromDate" class="logs-field-input" />
+                    </label>
+                    <label class="logs-field">
+                        <span class="logs-field-label"><i class="bi bi-calendar-check"></i> To date</span>
+                        <input type="date" id="toDate" class="logs-field-input" />
+                    </label>
+                    <label class="logs-field">
+                        <span class="logs-field-label"><i class="bi bi-clock"></i> From time</span>
+                        <input type="time" id="fromTime" class="logs-field-input" />
+                    </label>
+                    <label class="logs-field">
+                        <span class="logs-field-label"><i class="bi bi-clock-history"></i> To time</span>
+                        <input type="time" id="toTime" class="logs-field-input" />
+                    </label>
+                    <div class="logs-sidebar-actions">
+                        <button type="button" id="btnApply" class="logs-btn logs-btn-primary">
+                            <i class="bi bi-funnel"></i> Apply
+                        </button>
+                        <button type="button" id="btnClear" class="logs-btn logs-btn-ghost">
+                            <i class="bi bi-x-lg"></i> Clear
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="logs-sidebar-card logs-sidebar-card--actions">
+                <header class="logs-sidebar-head">
+                    <i class="bi bi-lightning"></i>
+                    <span>Actions</span>
+                </header>
+                <div class="logs-sidebar-body logs-sidebar-stack">
+                    <button type="button" class="logs-btn logs-btn-device logs-sidebar-tab-only" id="btnLoadDevice" data-for-tab="device" hidden>
+                        <i class="bi bi-download"></i> Load range from device
+                    </button>
+                    <button type="button" class="logs-btn logs-btn-export" id="btnExportExcel">
+                        <i class="bi bi-file-earmark-spreadsheet"></i> Export to Excel
+                    </button>
+                    <p class="logs-export-hint">Exports the active tab (current filters / search).</p>
+                </div>
+            </div>
+        </aside>
+
+        <div class="logs-main">
+            <div class="logs-tabs" role="tablist" aria-label="Log source">
+                <button type="button" class="logs-tab is-active" role="tab" aria-selected="true" data-logs-tab="portal" id="tabPortal">
+                    <i class="bi bi-database"></i> Portal DB
+                </button>
+                <button type="button" class="logs-tab" role="tab" aria-selected="false" data-logs-tab="device" id="tabDevice">
+                    <i class="bi bi-hdd-network"></i> Device memory
+                </button>
+                <button type="button" class="logs-tab" role="tab" aria-selected="false" data-logs-tab="live" id="tabLive">
+                    <i class="bi bi-broadcast"></i> Live
+                    <span class="logs-tab-live-dot" id="logsLiveDot" aria-hidden="true"></span>
+                </button>
+            </div>
+
+            <section class="panel panel-pro panel-full panel-datatable logs-panel is-active" data-logs-panel="portal" role="tabpanel" aria-labelledby="tabPortal">
+                <header class="panel-head panel-head-pro">
+                    <h2><i class="bi bi-database panel-title-icon"></i> Oracle · synced attendance</h2>
+                </header>
+                <div class="portal-dt-host">
+                    <table id="logsTablePortal" class="display portal-datatable grid grid-head-dark logs-table" style="width:100%" data-dt-server="true" data-portal-datetime-cols="0">
+                        <thead>
+                            <tr>
+                                <th>Punch time</th>
+                                <th>Employee ID</th>
+                                <th>Name</th>
+                                <th>Device</th>
+                                <th>Location</th>
+                                <th>Device ID</th>
+                                <th>Status</th>
+                                <th>Work code</th>
+                                <th>Source</th>
+                                <th>Device SN</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </section>
+
+            <section class="panel panel-pro panel-full panel-datatable logs-panel" data-logs-panel="device" role="tabpanel" aria-labelledby="tabDevice" hidden>
+                <header class="panel-head panel-head-pro">
+                    <h2><i class="bi bi-router panel-title-icon"></i> Terminal buffer · GetRecord</h2>
+                </header>
+                <div class="portal-dt-host">
+                    <table id="logsTableDevice" class="display portal-datatable grid grid-head-dark logs-table" style="width:100%" data-portal-datetime-cols="0">
+                        <thead>
+                            <tr>
+                                <th>Punch time</th>
+                                <th>Employee ID</th>
+                                <th>Name</th>
+                                <th>Device</th>
+                                <th>Location</th>
+                                <th>Device ID</th>
+                                <th>Status</th>
+                                <th>Work code</th>
+                                <th>Source</th>
+                                <th>Device SN</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </section>
+
+            <section class="panel panel-pro panel-full panel-datatable logs-panel" data-logs-panel="live" role="tabpanel" aria-labelledby="tabLive" hidden>
+                <header class="panel-head panel-head-pro">
+                    <h2><i class="bi bi-lightning-charge panel-title-icon"></i> Live feed</h2>
+                    <p class="logs-live-inline" id="liveFeedStatus"><span class="logs-live-pill" id="liveFeedPill">Connecting…</span></p>
+                </header>
+                <div class="portal-dt-host">
+                    <table id="logsTableLive" class="display portal-datatable grid grid-head-dark logs-table" style="width:100%" data-portal-datetime-cols="1">
+                        <thead>
+                            <tr>
+                                <th class="col-live-dot"></th>
+                                <th>Punch time</th>
+                                <th>Employee ID</th>
+                                <th>Name</th>
+                                <th>Device</th>
+                                <th>Location</th>
+                                <th>Device ID</th>
+                                <th>Status</th>
+                                <th>Work code</th>
+                                <th>Source</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+
+<input type="hidden" id="filterDeviceId" value="@ViewBag.DeviceId" />
+<input type="hidden" id="logsSyncMode" value="@syncMode" />
+
+@section Scripts {
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.0/signalr.min.js"></script>
+    <script src="~/js/logs-page.js" asp-append-version="true"></script>
+}

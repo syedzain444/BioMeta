@@ -1,0 +1,86 @@
+@model BiometricDashboard.Web.Models.UserListViewModel
+@using BiometricDashboard.Web.Models
+@{
+    ViewData["Title"] = "Users";
+    ViewBag.ActiveNav = "AdminUsers";
+    var users = Model.Users;
+    var band = new PortalPageBandViewModel
+    {
+        Eyebrow = "Administration",
+        Title = "User management",
+        IconClass = "bi-people",
+        Subtitle = "Portal accounts linked to employee IDs",
+        Stats =
+        [
+            new() { Label = "Total users", Value = users.Count.ToString(), Meta = "registered accounts", IconClass = "bi-people", ColorIndex = 1 },
+            new() { Label = "Active", Value = users.Count(u => u.IsActive).ToString(), Meta = "can sign in", IconClass = "bi-person-check", ColorIndex = 2 },
+            new() { Label = "Inactive", Value = users.Count(u => !u.IsActive).ToString(), Meta = "disabled", IconClass = "bi-person-x", ColorIndex = 3 },
+            new() { Label = "With roles", Value = users.Count(u => u.RoleCodes.Count > 0).ToString(), Meta = "RBAC assigned", IconClass = "bi-shield-lock", ColorIndex = 4 },
+        ],
+    };
+    var avatarSm = new ViewDataDictionary(ViewData) { { "AvatarSize", "sm" } };
+}
+
+<div class="portal-page-layout">
+    <div class="portal-page-head">
+        @await Html.PartialAsync("_PortalPageBand", band)
+    </div>
+
+    <section class="panel panel-pro panel-full panel-datatable data-panel">
+        <header class="panel-head panel-head-pro">
+            <h2><i class="bi bi-person-lines-fill panel-title-icon"></i> Users</h2>
+            @if (User.HasClaim("permission", "users.manage"))
+            {
+                <div class="panel-head-tools">
+                    <a class="portal-panel-add" data-grid-toolbar asp-action="Create">
+                        <span class="portal-panel-add-icon"><i class="bi bi-person-plus" aria-hidden="true"></i></span>
+                        <span>New user</span>
+                    </a>
+                </div>
+            }
+        </header>
+        <div class="portal-dt-host">
+            <table id="adminUsersTable" class="display portal-datatable data-table grid grid-head-dark" style="width:100%" data-dt-order="0,asc">
+                <thead>
+                    <tr>
+                        <th><span class="th-label"><i class="bi bi-person-badge th-icon" aria-hidden="true"></i>Employee ID</span></th>
+                        <th><span class="th-label"><i class="bi bi-person th-icon" aria-hidden="true"></i>Name</span></th>
+                        <th><span class="th-label"><i class="bi bi-envelope th-icon" aria-hidden="true"></i>Email</span></th>
+                        <th><span class="th-label"><i class="bi bi-shield-lock th-icon" aria-hidden="true"></i>Roles</span></th>
+                        <th><span class="th-label"><i class="bi bi-toggle-on th-icon" aria-hidden="true"></i>Status</span></th>
+                        <th class="col-actions" aria-label="Actions"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach (var u in users)
+                {
+                    <tr>
+                        <td><code class="emp-id">@u.EmployeeId</code></td>
+                        <td>
+                            <span class="user-cell">
+                                @await Html.PartialAsync("_UserAvatar", u.DisplayName, avatarSm)
+                                <span>@u.DisplayName</span>
+                            </span>
+                        </td>
+                        <td>@(u.Email ?? "—")</td>
+                        <td>@string.Join(", ", u.RoleCodes)</td>
+                        <td><span class="badge @(u.IsActive ? "ok" : "muted")">@(u.IsActive ? "Active" : "Inactive")</span></td>
+                        <td class="row-actions portal-row-actions">
+                            @if (User.HasClaim("permission", "users.manage"))
+                            {
+                                <div class="portal-row-actions-inner">
+                                    <a class="portal-act portal-act--edit" asp-action="Edit" asp-route-id="@u.UserId" title="Edit" aria-label="Edit user"><i class="bi bi-pencil"></i></a>
+                                    <form asp-action="Delete" asp-route-id="@u.UserId" method="post" class="portal-act-form" onsubmit="return confirm('Remove this user?');">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="portal-act portal-act--danger" title="Delete" aria-label="Delete user"><i class="bi bi-trash"></i></button>
+                                    </form>
+                                </div>
+                            }
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </section>
+</div>

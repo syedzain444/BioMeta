@@ -1,0 +1,535 @@
+/* Connection test modal — mock layout (scoped) */
+.gateos-portal .adev-sheet--test {
+  width: min(480px, 100%);
+  max-height: calc(100vh - 32px);
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  overflow: visible;
+  animation: dtst-pop 0.45s cubic-bezier(0.2, 0.9, 0.3, 1.15);
+}
+
+@keyframes dtst-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.94) translateY(10px);
+  }
+}
+
+.gateos-portal .dtst-modal {
+  --dtst-ink: #111827;
+  --dtst-mute: #6b7280;
+  --dtst-glass: rgba(250, 251, 254, 0.82);
+  --dtst-gb: rgba(255, 255, 255, 0.95);
+  --dtst-group: rgba(255, 255, 255, 0.92);
+  --dtst-line: rgba(17, 24, 39, 0.08);
+  --dtst-chip: rgba(60, 70, 110, 0.07);
+  --dtst-g1: #34d399;
+  --dtst-g2: #0ea371;
+  position: relative;
+  width: 100%;
+  max-height: calc(100vh - 32px);
+  overflow: auto;
+  border-radius: 32px;
+  background: var(--dtst-glass);
+  backdrop-filter: blur(40px) saturate(1.8);
+  -webkit-backdrop-filter: blur(40px) saturate(1.8);
+  border: 1px solid var(--dtst-gb);
+  box-shadow:
+    0 40px 90px -24px rgba(20, 30, 60, 0.5),
+    inset 0 1px 0 var(--dtst-gb);
+  color: var(--dtst-ink);
+  font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", sans-serif;
+}
+
+.gateos-portal .dtst-modal svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.gateos-portal .dtst-tb {
+  position: relative;
+  padding: 18px 0;
+  text-align: center;
+  font-size: 13.5px;
+  font-weight: 600;
+}
+
+.gateos-portal .dtst-dots {
+  position: absolute;
+  top: 19px;
+  left: 20px;
+  display: flex;
+  gap: 8px;
+}
+
+.gateos-portal .dtst-dots button {
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  background: #ff5f57;
+  box-shadow: inset 0 0 0 0.5px rgba(0, 0, 0, 0.15);
+}
+
+.gateos-portal .dtst-dots button:nth-child(2) {
+  background: #febc2e;
+}
+.gateos-portal .dtst-dots button:nth-child(3) {
+  background: #28c840;
+}
+
+.gateos-portal .dtst-body {
+  padding: 6px 24px 8px;
+}
+
+.gateos-portal .dtst-hero {
+  text-align: center;
+  padding: 8px 0 20px;
+}
+
+.gateos-portal .dtst-badge {
+  position: relative;
+  width: 84px;
+  height: 84px;
+  margin: 0 auto 16px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  background: linear-gradient(145deg, var(--dtst-g1), var(--dtst-g2));
+  box-shadow:
+    0 16px 30px -10px rgba(16, 185, 129, 0.65),
+    inset 0 2px 0 rgba(255, 255, 255, 0.4);
+  transition: background 0.4s;
+}
+
+.gateos-portal .dtst-badge::before {
+  content: "";
+  position: absolute;
+  inset: -9px;
+  border-radius: 50%;
+  border: 2px solid rgba(16, 185, 129, 0.25);
+  animation: dtst-ring 2.4s ease-out infinite;
+}
+
+.gateos-portal .dtst-modal[data-s="run"] .dtst-badge::before {
+  display: none;
+}
+
+@keyframes dtst-ring {
+  from {
+    transform: scale(0.9);
+    opacity: 1;
+  }
+  to {
+    transform: scale(1.25);
+    opacity: 0;
+  }
+}
+
+.gateos-portal .dtst-badge svg.dtst-ck {
+  width: 40px;
+  height: 40px;
+  stroke-width: 2.6;
+  display: none;
+}
+
+.gateos-portal .dtst-badge .dtst-sp {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 4px solid rgba(255, 255, 255, 0.4);
+  border-top-color: #fff;
+  animation: dtst-spin 0.8s linear infinite;
+  display: none;
+}
+
+.gateos-portal .dtst-modal[data-s="run"] .dtst-badge .dtst-sp {
+  display: block;
+}
+
+.gateos-portal .dtst-modal[data-s="ok"] .dtst-badge .dtst-ck {
+  display: block;
+  animation: dtst-ckp 0.5s cubic-bezier(0.3, 1.6, 0.5, 1);
+}
+
+.gateos-portal .dtst-modal[data-s="ok"] .dtst-badge .dtst-sp {
+  display: none;
+}
+
+.gateos-portal .dtst-modal[data-s="ok"] .dtst-badge::before {
+  display: none;
+}
+
+.gateos-portal .dtst-modal[data-s="run"] .dtst-badge {
+  background: linear-gradient(145deg, #9aa5b8, #64718c);
+  box-shadow:
+    0 16px 30px -10px rgba(80, 95, 130, 0.55),
+    inset 0 2px 0 rgba(255, 255, 255, 0.4);
+}
+
+.gateos-portal .dtst-modal[data-s="fail"] .dtst-badge,
+.gateos-portal .dtst-modal[data-s="warn"] .dtst-badge {
+  background: linear-gradient(145deg, #f87171, #dc2626);
+  box-shadow: 0 16px 30px -10px rgba(220, 38, 38, 0.45), inset 0 2px 0 rgba(255, 255, 255, 0.35);
+}
+
+.gateos-portal .dtst-modal[data-s="warn"] .dtst-badge {
+  background: linear-gradient(145deg, #fbbf24, #d97706);
+  box-shadow: 0 16px 30px -10px rgba(217, 119, 6, 0.45), inset 0 2px 0 rgba(255, 255, 255, 0.35);
+}
+
+.gateos-portal .dtst-modal[data-s="fail"] .dtst-badge .dtst-ck,
+.gateos-portal .dtst-modal[data-s="warn"] .dtst-badge .dtst-ck {
+  display: none;
+}
+
+.gateos-portal .dtst-modal[data-s="fail"] .dtst-badge .dtst-sp,
+.gateos-portal .dtst-modal[data-s="warn"] .dtst-badge .dtst-sp {
+  display: none;
+}
+
+.gateos-portal .dtst-modal[data-s="fail"] .dtst-badge::before,
+.gateos-portal .dtst-modal[data-s="warn"] .dtst-badge::before {
+  display: none;
+}
+
+@keyframes dtst-ckp {
+  from {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+}
+
+@keyframes dtst-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.gateos-portal .dtst-hero h1 {
+  margin: 0;
+  font-size: 22px;
+  letter-spacing: -0.02em;
+  font-weight: 700;
+}
+
+.gateos-portal .dtst-hero p {
+  margin: 6px 0 0;
+  font-size: 13.5px;
+  color: var(--dtst-mute);
+}
+
+.gateos-portal .dtst-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.gateos-portal .dtst-stat {
+  background: var(--dtst-group);
+  border: 1px solid var(--dtst-line);
+  border-radius: 18px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.gateos-portal .dtst-ri {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  flex: none;
+  color: #fff;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    0 3px 6px -2px rgba(40, 50, 80, 0.3);
+}
+
+.gateos-portal .dtst-ri svg {
+  width: 18px;
+  height: 18px;
+}
+
+.gateos-portal .dtst-stat small {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--dtst-mute);
+}
+
+.gateos-portal .dtst-stat b {
+  font-size: 20px;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.gateos-portal .dtst-cap {
+  margin: 18px 0 6px 14px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--dtst-mute);
+}
+
+.gateos-portal .dtst-grp {
+  background: var(--dtst-group);
+  border: 1px solid var(--dtst-line);
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+.gateos-portal .dtst-rw {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  min-height: 50px;
+  border-top: 1px solid var(--dtst-line);
+  font-size: 14px;
+}
+
+.gateos-portal .dtst-rw:first-child {
+  border-top: 0;
+}
+
+.gateos-portal .dtst-rw .dtst-ri {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+}
+
+.gateos-portal .dtst-rw .dtst-ri svg {
+  width: 16px;
+  height: 16px;
+}
+
+.gateos-portal .dtst-rw .dtst-v {
+  margin-left: auto;
+  font-weight: 600;
+  text-align: right;
+}
+
+.gateos-portal .dtst-mono {
+  font:
+    600 12px ui-monospace,
+    Menlo,
+    Consolas,
+    monospace;
+  background: #d9f5e8;
+  color: #0a9d63;
+  padding: 4px 10px;
+  border-radius: 8px;
+}
+
+.gateos-portal .dtst-steps {
+  list-style: none;
+  margin: 0;
+  padding: 6px 0;
+}
+
+.gateos-portal .dtst-st {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 16px;
+  opacity: 0.5;
+  transition: opacity 0.3s;
+}
+
+.gateos-portal .dtst-st:not(:last-child)::before {
+  content: "";
+  position: absolute;
+  left: 31px;
+  top: 42px;
+  bottom: -10px;
+  width: 2px;
+  background: var(--dtst-line);
+}
+
+.gateos-portal .dtst-st.run,
+.gateos-portal .dtst-st.done {
+  opacity: 1;
+}
+
+.gateos-portal .dtst-st.done:not(:last-child)::before {
+  background: linear-gradient(var(--dtst-g1), var(--dtst-g1));
+}
+
+.gateos-portal .dtst-sd {
+  position: relative;
+  z-index: 1;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  flex: none;
+  display: grid;
+  place-items: center;
+  background: var(--dtst-chip);
+  color: var(--dtst-mute);
+  transition: all 0.3s;
+}
+
+.gateos-portal .dtst-sd svg {
+  width: 15px;
+  height: 15px;
+}
+
+.gateos-portal .dtst-sd .dtst-o,
+.gateos-portal .dtst-sd .dtst-i,
+.gateos-portal .dtst-sd .dtst-k {
+  display: none;
+}
+
+.gateos-portal .dtst-st .dtst-i {
+  display: block;
+}
+
+.gateos-portal .dtst-st.run .dtst-sd {
+  background: #fff;
+  border: 2px solid var(--dtst-line);
+}
+
+.gateos-portal .dtst-st.run .dtst-i {
+  display: none;
+}
+
+.gateos-portal .dtst-st.run .dtst-o {
+  display: block;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid var(--dtst-g2);
+  border-right-color: transparent;
+  animation: dtst-spin 0.7s linear infinite;
+}
+
+.gateos-portal .dtst-st.done .dtst-i {
+  display: none;
+}
+
+.gateos-portal .dtst-st.done .dtst-k {
+  display: block;
+  stroke-width: 3;
+}
+
+.gateos-portal .dtst-st.done .dtst-sd {
+  background: linear-gradient(var(--dtst-g1), var(--dtst-g2));
+  color: #fff;
+  box-shadow: 0 6px 12px -4px rgba(16, 185, 129, 0.55);
+}
+
+.gateos-portal .dtst-st.fail .dtst-sd {
+  background: linear-gradient(#f87171, #dc2626);
+  color: #fff;
+}
+
+.gateos-portal .dtst-st b {
+  font-size: 14px;
+  display: block;
+}
+
+.gateos-portal .dtst-st small {
+  font-size: 12px;
+  color: var(--dtst-mute);
+}
+
+.gateos-portal .dtst-rs {
+  margin-left: auto;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 99px;
+  background: #d9f5e8;
+  color: #0a9d63;
+  opacity: 0;
+  transition: opacity 0.3s;
+  white-space: nowrap;
+}
+
+.gateos-portal .dtst-st.done .dtst-rs,
+.gateos-portal .dtst-st.fail .dtst-rs {
+  opacity: 1;
+}
+
+.gateos-portal .dtst-st.fail .dtst-rs {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.gateos-portal .dtst-note {
+  display: flex;
+  gap: 10px;
+  margin: 16px 4px 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--dtst-mute);
+}
+
+.gateos-portal .dtst-note svg {
+  width: 16px;
+  height: 16px;
+  flex: none;
+  margin-top: 1px;
+}
+
+.gateos-portal .dtst-foot {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  padding: 18px 24px 22px;
+}
+
+.gateos-portal .dtst-b {
+  font: inherit;
+  font-size: 13.5px;
+  font-weight: 600;
+  border: 1px solid var(--dtst-gb);
+  background: var(--dtst-group);
+  color: var(--dtst-ink);
+  padding: 10px 20px;
+  border-radius: 99px;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: transform 0.15s;
+}
+
+.gateos-portal .dtst-b:hover {
+  transform: translateY(-1px);
+}
+
+.gateos-portal .dtst-b svg {
+  width: 15px;
+  height: 15px;
+}
+
+.gateos-portal .dtst-b.dtst-p {
+  background: linear-gradient(var(--dtst-g1), var(--dtst-g2));
+  border-color: transparent;
+  color: #fff;
+  box-shadow: 0 8px 18px -6px rgba(16, 185, 129, 0.6);
+  padding: 10px 30px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gateos-portal .dtst-modal * {
+    animation: none !important;
+  }
+}

@@ -1,0 +1,607 @@
+/* GateOS sign-in — scoped to .gateos-login */
+.gateos-login {
+  --navy-950: #070c18;
+  --navy-900: #0b1220;
+  --navy-800: #111a2e;
+  --teal-700: #0f5f5c;
+  --teal-500: #14b8a6;
+  --teal-300: #5eead4;
+  --green-500: #10b981;
+  --green-300: #34d399;
+  --orange-500: #f59e0b;
+  --indigo-500: #6366f1;
+  --pink-500: #ec4899;
+  --glass: rgba(255, 255, 255, 0.08);
+  --glass-line: rgba(255, 255, 255, 0.16);
+  --text: #f1f5f9;
+  --text-dim: rgba(241, 245, 249, 0.62);
+  box-sizing: border-box;
+  margin: 0;
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  color: var(--text);
+  background: var(--navy-950);
+  overflow: hidden;
+  height: 100%;
+}
+
+.gateos-login *,
+.gateos-login *::before,
+.gateos-login *::after {
+  box-sizing: border-box;
+}
+
+html:has(.gateos-login) {
+  height: 100%;
+}
+
+.gateos-login .wallpaper {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  background: linear-gradient(160deg, var(--navy-950) 0%, var(--navy-900) 45%, #0b2a2d 100%);
+}
+
+.gateos-login .orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.55;
+  will-change: transform;
+}
+
+.gateos-login .orb.a {
+  width: 46vmax;
+  height: 46vmax;
+  left: -12vmax;
+  top: -16vmax;
+  background: radial-gradient(circle, var(--teal-500), transparent 68%);
+  animation: gateos-drift1 38s ease-in-out infinite alternate;
+}
+
+.gateos-login .orb.b {
+  width: 34vmax;
+  height: 34vmax;
+  right: -10vmax;
+  top: 6vmax;
+  background: radial-gradient(circle, var(--indigo-500), transparent 68%);
+  opacity: 0.42;
+  animation: gateos-drift2 46s ease-in-out infinite alternate;
+}
+
+.gateos-login .orb.c {
+  width: 30vmax;
+  height: 30vmax;
+  left: 8vmax;
+  bottom: -14vmax;
+  background: radial-gradient(circle, var(--orange-500), transparent 68%);
+  opacity: 0.3;
+  animation: gateos-drift2 52s ease-in-out infinite alternate-reverse;
+}
+
+.gateos-login .orb.d {
+  width: 32vmax;
+  height: 32vmax;
+  right: 6vmax;
+  bottom: -16vmax;
+  background: radial-gradient(circle, var(--pink-500), transparent 68%);
+  opacity: 0.34;
+  animation: gateos-drift1 44s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes gateos-drift1 {
+  to {
+    transform: translate(6vmax, 5vmax) scale(1.08);
+  }
+}
+
+@keyframes gateos-drift2 {
+  to {
+    transform: translate(-6vmax, 4vmax) scale(1.1);
+  }
+}
+
+.gateos-login .grain {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+  background-size: 3px 3px;
+  opacity: 0.35;
+}
+
+.gateos-login .screen {
+  position: relative;
+  z-index: 1;
+  height: 100vh;
+  min-height: 100%;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  padding: 22px 28px;
+}
+
+.gateos-login .topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.gateos-login .brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.gateos-login .brand-mark {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, var(--green-500), var(--teal-500));
+  box-shadow: 0 8px 20px -6px rgba(16, 185, 129, 0.7);
+}
+
+.gateos-login .brand-mark svg {
+  width: 19px;
+  height: 19px;
+  stroke: #fff;
+}
+
+.gateos-login .status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--text-dim);
+  padding: 7px 13px;
+  border-radius: 999px;
+  background: var(--glass);
+  border: 1px solid var(--glass-line);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.gateos-login .status i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--green-500);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.25);
+  font-style: normal;
+}
+
+.gateos-login .center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+}
+
+.gateos-login .clock {
+  text-align: center;
+  margin-bottom: clamp(18px, 4vh, 40px);
+}
+
+.gateos-login .time {
+  font-size: clamp(64px, 11vw, 120px);
+  font-weight: 300;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.gateos-login .time .sec {
+  font-size: 0.32em;
+  font-weight: 500;
+  letter-spacing: 0;
+  color: var(--teal-300);
+  margin-left: 0.22em;
+  vertical-align: 0.9em;
+}
+
+.gateos-login .date {
+  margin-top: 10px;
+  font-size: clamp(14px, 1.6vw, 18px);
+  font-weight: 500;
+  color: var(--text-dim);
+}
+
+.gateos-login .card {
+  width: min(360px, 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.gateos-login .avatar {
+  position: relative;
+  width: 92px;
+  height: 92px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  margin-bottom: 16px;
+  background: linear-gradient(135deg, var(--green-500), var(--teal-500) 60%, var(--indigo-500));
+  padding: 3px;
+  box-shadow: 0 18px 40px -14px rgba(20, 184, 166, 0.8);
+}
+
+.gateos-login .avatar::after {
+  content: "";
+  position: absolute;
+  inset: -9px;
+  border-radius: 50%;
+  border: 1.5px dashed rgba(94, 234, 212, 0.45);
+  animation: gateos-spin 40s linear infinite;
+}
+
+.gateos-login .avatar-in {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: var(--navy-800);
+  display: grid;
+  place-items: center;
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.gateos-login .avatar-in svg {
+  width: 40px;
+  height: 40px;
+  stroke: var(--teal-300);
+}
+
+.gateos-login .avatar-in span {
+  display: none;
+}
+
+.gateos-login .avatar.has-id .avatar-in svg {
+  display: none;
+}
+
+.gateos-login .avatar.has-id .avatar-in span {
+  display: block;
+}
+
+@keyframes gateos-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.gateos-login .who {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.gateos-login .hint {
+  margin: 6px 0 20px;
+  font-size: 13px;
+  color: var(--text-dim);
+  min-height: 19px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-align: center;
+}
+
+.gateos-login .hint.is-hidden {
+  visibility: hidden;
+}
+
+.gateos-login .hint svg {
+  width: 14px;
+  height: 14px;
+  flex: none;
+}
+
+.gateos-login form {
+  width: 100%;
+  display: grid;
+  gap: 10px;
+}
+
+.gateos-login .field {
+  position: relative;
+}
+
+.gateos-login .field > svg.ic {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 17px;
+  height: 17px;
+  stroke: var(--text-dim);
+  pointer-events: none;
+}
+
+.gateos-login .field input {
+  width: 100%;
+  height: 50px;
+  padding: 0 52px 0 43px;
+  font: inherit;
+  font-size: 14.5px;
+  color: var(--text);
+  background: var(--glass);
+  border: 1px solid var(--glass-line);
+  border-radius: 14px;
+  outline: none;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+}
+
+.gateos-login .field input::placeholder {
+  color: rgba(241, 245, 249, 0.45);
+}
+
+.gateos-login .field input:focus {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: var(--green-300);
+  box-shadow: 0 0 0 4px rgba(52, 211, 153, 0.18);
+}
+
+.gateos-login .field input:-webkit-autofill {
+  -webkit-text-fill-color: var(--text);
+  transition: background-color 9999s;
+}
+
+.gateos-login .field input.input-validation-error {
+  border-color: #fda4af;
+  box-shadow: 0 0 0 4px rgba(253, 164, 175, 0.15);
+}
+
+.gateos-login .go {
+  position: absolute;
+  right: 7px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 11px;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, var(--green-500), var(--teal-500));
+  box-shadow: 0 8px 18px -8px rgba(16, 185, 129, 0.9);
+  transition: filter 0.12s, transform 0.12s;
+}
+
+.gateos-login .go:hover {
+  filter: brightness(1.1);
+}
+
+.gateos-login .go:active {
+  transform: translateY(-50%) scale(0.95);
+}
+
+.gateos-login .go svg {
+  width: 18px;
+  height: 18px;
+  stroke: #fff;
+}
+
+.gateos-login .eye {
+  position: absolute;
+  right: 50px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+
+.gateos-login .eye:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.gateos-login .eye svg {
+  width: 17px;
+  height: 17px;
+  stroke: var(--text-dim);
+}
+
+.gateos-login .field.pw input {
+  padding-right: 90px;
+}
+
+.gateos-login .eye:focus-visible,
+.gateos-login .go:focus-visible,
+.gateos-login .opt:focus-visible {
+  outline: 3px solid rgba(94, 234, 212, 0.6);
+  outline-offset: 2px;
+}
+
+.gateos-login .msg {
+  font-size: 12.5px;
+  min-height: 18px;
+  text-align: center;
+  color: #fda4af;
+}
+
+.gateos-login .msg:empty {
+  min-height: 0;
+}
+
+.gateos-login .caps {
+  display: none;
+  align-items: center;
+  gap: 6px;
+  justify-content: center;
+  font-size: 12px;
+  color: #fcd34d;
+}
+
+.gateos-login .caps.show {
+  display: flex;
+}
+
+.gateos-login .caps svg {
+  width: 14px;
+  height: 14px;
+}
+
+.gateos-login .card.shake {
+  animation: gateos-shake 0.38s;
+}
+
+@keyframes gateos-shake {
+  20%,
+  60% {
+    transform: translateX(-8px);
+  }
+  40%,
+  80% {
+    transform: translateX(8px);
+  }
+}
+
+.gateos-login .bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.gateos-login .opts {
+  display: flex;
+  gap: 10px;
+}
+
+.gateos-login .opt {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  background: var(--glass);
+  border: 1px solid var(--glass-line);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  color: var(--text);
+  transition: background 0.15s;
+}
+
+.gateos-login .opt:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.gateos-login .opt svg {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+}
+
+.gateos-login .chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-dim);
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: var(--glass);
+  border: 1px solid var(--glass-line);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.gateos-login .chip i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--green-500);
+  font-style: normal;
+}
+
+.gateos-login .tiles {
+  display: flex;
+  gap: 6px;
+  width: 90px;
+  justify-content: flex-end;
+}
+
+.gateos-login .tiles span {
+  width: 16px;
+  height: 8px;
+  border-radius: 4px;
+}
+
+.gateos-login .tiles span:nth-child(1) {
+  background: var(--green-500);
+}
+
+.gateos-login .tiles span:nth-child(2) {
+  background: var(--orange-500);
+}
+
+.gateos-login .tiles span:nth-child(3) {
+  background: var(--indigo-500);
+}
+
+.gateos-login .tiles span:nth-child(4) {
+  background: var(--pink-500);
+}
+
+.gateos-login .validation-summary-errors {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .gateos-login .screen {
+    padding: 16px;
+  }
+  .gateos-login .status {
+    display: none;
+  }
+  .gateos-login .tiles {
+    display: none;
+  }
+  .gateos-login .bottom {
+    justify-content: space-between;
+  }
+}
+
+@media (max-height: 640px) {
+  .gateos-login .time {
+    font-size: 56px;
+  }
+  .gateos-login .clock {
+    margin-bottom: 14px;
+  }
+  .gateos-login .avatar {
+    width: 72px;
+    height: 72px;
+    margin-bottom: 12px;
+  }
+  .gateos-login .hint {
+    margin-bottom: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gateos-login .orb,
+  .gateos-login .avatar::after,
+  .gateos-login .card.shake {
+    animation: none;
+  }
+  .gateos-login * {
+    transition: none !important;
+  }
+}

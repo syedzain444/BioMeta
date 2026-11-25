@@ -1,0 +1,289 @@
+@using System.Linq
+@using BiometricDashboard.Web.Models
+@{
+    ViewData["Title"] = "Device Users";
+    ViewData["GateosEnrolledUsers"] = true;
+    Layout = "_DashboardLayout";
+    var band = ViewBag.PageBand as PortalPageBandViewModel;
+    var deviceLabel = ViewBag.DeviceLabel as string ?? "No device selected";
+    var deviceShort = deviceLabel.Contains('(')
+        ? deviceLabel[..deviceLabel.IndexOf('(')].Trim()
+        : deviceLabel;
+    var enrolledCount = ViewBag.EnrolledDeviceCount is int ec ? ec : 0;
+    var canManageDevices = User.HasClaim("permission", "devices.manage");
+}
+
+<section class="gateos-window geu-window" aria-label="Device enrolled users">
+    <div class="gateos-titlebar geu-titlebar">
+        <div class="gateos-lights" aria-hidden="true"><i></i><i></i><i></i></div>
+        <h2>Device Enrolled Users — <span id="enrolledTitleDev">@deviceShort</span></h2>
+        <a class="geu-link-photos" href="@Url.Action("Index", "DeviceEmployeePhotos")">Employee photos</a>
+    </div>
+
+    <div class="geu-toolbar">
+        <div class="geu-tgroup">
+            <span class="geu-tlabel">Terminal</span>
+            <select class="geu-sel" id="enrolledDeviceSelect" aria-label="Terminal for this fetch">
+                <option value="">— Select device —</option>
+            </select>
+        </div>
+        <label class="geu-switch">
+            <input type="checkbox" id="chkAllDevices" />
+            <span class="geu-track"></span>
+            All active devices
+        </label>
+        <div class="geu-vsep"></div>
+        <div class="geu-tgroup">
+            <span class="geu-tlabel">Batch size</span>
+            <input class="geu-num" id="batchSize" type="number" min="5" max="80" value="35" aria-label="Batch size" />
+        </div>
+        <button class="geu-icon-btn" type="button" id="enrolledHelpBtn" aria-label="Which device is used?" aria-expanded="false">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.3-1 .9-1 1.7M12 17h.01"/></svg>
+        </button>
+        <div class="geu-spacer"></div>
+        <button class="geu-btn geu-btn-primary" type="button" id="fetchBtn">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18a4.5 4.5 0 1 1 1-8.9A6 6 0 0 1 19.5 11 3.5 3.5 0 0 1 18 18"/><path d="M12 12v7M9 16l3 3 3-3"/></svg>
+            <span id="fetchLbl">Fetch full list</span>
+        </button>
+        <div class="geu-pop" id="enrolledHelpPop" role="dialog" aria-label="Which device is used?" hidden>
+            <b>Which device is used?</b>
+            Top bar → <em>Active device</em> (Gate 1, Gate 2, …) is the portal default. On this page, pick the same terminal in the toolbar for <em>fetch / full user list</em>, or turn on <em>All active devices</em> to query every active gate at once.
+            <div style="margin-top:6px">Portal default now: <em id="enrolledPortalDefaultLabel">@deviceLabel</em></div>
+            <div style="margin-top:2px;color:#94a3b8" id="enrolledDeviceHint">
+                @(enrolledCount > 0
+                    ? $"{enrolledCount} active terminal(s) in portal — names match the top bar list."
+                    : "No active devices in Admin → Devices. Mark Gate 1 / Gate 2 as active.")
+            </div>
+        </div>
+    </div>
+
+    <div class="geu-content">
+        @if (band != null)
+        {
+            @await Html.PartialAsync("_PortalPageBand", band)
+        }
+
+        <div class="geu-split">
+            <section class="geu-card" aria-label="Pull enrolled profiles">
+                <div class="geu-card-h"><span class="geu-step">1</span><h3>Source of IDs</h3></div>
+                <div class="geu-card-b">
+                    <div class="geu-opts" role="radiogroup" aria-label="Build ID queue">
+                        <button class="geu-opt" type="button" role="radio" aria-checked="false" data-src="queue" id="btnSourceQueue">
+                            <span class="geu-oi"><svg viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3.5 6h.01M3.5 12h.01M3.5 18h.01"/></svg></span>
+                            <span><b>Queue IDs</b><small>Text box or attached Excel</small></span>
+                        </button>
+                        <button class="geu-opt" type="button" role="radio" aria-checked="false" data-src="logs" id="btnIdsDevice">
+                            <span class="geu-oi"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="7" rx="2"/><rect x="3" y="13" width="18" height="7" rx="2"/><path d="M7 7.5h.01M7 16.5h.01"/></svg></span>
+                            <span><b>From device logs</b><small>Unique IDs in GetRecord</small></span>
+                        </button>
+                        <button class="geu-opt" type="button" role="radio" aria-checked="false" data-src="db" id="btnIdsPortal">
+                            <span class="geu-oi"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v6c0 1.7 3.6 3 8 3s8-1.3 8-3V6M4 12v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></svg></span>
+                            <span><b>From portal DB</b><small>Distinct attendance IDs</small></span>
+                        </button>
+                        <button class="geu-opt" type="button" role="radio" aria-checked="false" data-src="full" id="btnPullAllDevice">
+                            <span class="geu-oi"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><circle cx="17" cy="9" r="2.5"/><path d="M17.5 14.2A5.5 5.5 0 0 1 21.5 19.5"/></svg></span>
+                            <span><b>Full user list</b><small>No NICs — like device User management</small></span>
+                        </button>
+                        <button class="geu-opt" type="button" role="radio" aria-checked="true" data-src="recent3d" id="btnRecentEnrolled">
+                            <span class="geu-oi"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4M16 2v4M3 10h18"/><circle cx="12" cy="15" r="2.5"/></svg></span>
+                            <span><b>Last 3 days enrolled</b><small>Today + previous 2 days · all active devices</small></span>
+                        </button>
+                    </div>
+
+                    <div class="geu-ids" id="idsPane" hidden>
+                        <textarea id="nicList" spellcheck="false" aria-label="NIC / Employee IDs" placeholder="4220112345671&#10;43503-8549589-5&#10;One ID per line — dashes are stripped automatically"></textarea>
+                        <div class="geu-excel">
+                            <button class="geu-btn" type="button" id="attachBtn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.5l-8.6 8.6a5.5 5.5 0 0 1-7.8-7.8l8.6-8.6a3.7 3.7 0 0 1 5.2 5.2l-8.6 8.6a1.8 1.8 0 0 1-2.6-2.6l7.9-7.9"/></svg>Attach Excel</button>
+                            <select class="geu-sel" id="excelNicColumn" disabled aria-label="Excel column"><option value="auto">Column: Auto-detect</option></select>
+                            <button class="geu-btn geu-btn-primary" type="button" id="btnImportNicExcel" disabled>Import &amp; queue</button>
+                            <input type="file" id="nicExcelFile" accept=".xlsx,.xls,.csv" hidden />
+                            <span class="geu-file-name" id="excelFileName" hidden></span>
+                        </div>
+                        <label class="geu-check">
+                            <input type="checkbox" id="excelFilterGrid" checked />
+                            Filter grid to imported NICs
+                            <button type="button" id="btnDownloadNicTemplate" class="geu-link">Sample Excel</button>
+                        </label>
+                        <button type="button" id="btnClearExcelNic" class="geu-link geu-hidden">Clear Excel filter</button>
+                        <p id="excelImportStatus" class="geu-excel-status geu-hidden" role="status"></p>
+                        <p class="geu-hint"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v5"/></svg>Paste IDs, or attach a workbook with a NIC / Employee ID column — dashes are stripped automatically.</p>
+                    </div>
+                    <div class="geu-noids" id="noIds">
+                        <span class="geu-oi"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v5"/></svg></span>
+                        <div><b id="noIdsTitle">No ID list needed</b><span id="noIdsText"> Pulls the complete user list from the device, like the device’s own User management screen.</span></div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="geu-card geu-grid-card" aria-label="Enrolled users">
+                <div class="geu-grid-h">
+                    <h3><span class="geu-step">2</span>Enrolled users <span class="geu-count-pill" id="countPill">0 users</span></h3>
+                    <label class="geu-search">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+                        <input class="geu-txt" id="enrolledGridSearch" type="search" placeholder="Search name or ID…" aria-label="Search name or ID" />
+                    </label>
+                    <button type="button" class="geu-btn geu-btn-export" id="btnBulkDownloadPhotos" hidden>
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                        Bulk download photos
+                    </button>
+                    <button type="button" class="geu-btn geu-btn-export" id="btnExportExcel" hidden>
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h8M8 9h2"/></svg>
+                        Export to Excel
+                    </button>
+                </div>
+                <div class="geu-run-pills" id="runPills" hidden>
+                    <span class="geu-rp geu-rp-a geu-spin"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-6.2-8.6"/></svg><span id="pillA">Pulling all enrolled users (no ID list)…</span></span>
+                    <span class="geu-rp geu-rp-b"><svg viewBox="0 0 24 24"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg><span id="pillB">Reading full user list from device…</span></span>
+                </div>
+                <div class="geu-table-wrap portal-dt-host">
+                    <table id="enrolledTable" class="display geu-table" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th class="col-sno">S.No</th>
+                                <th>Employee ID (NIC)</th>
+                                <th>Name</th>
+                                <th class="col-dept">Department</th>
+                                <th class="col-auth">Authority</th>
+                                <th class="col-card">Card</th>
+                                <th>Face</th>
+                                <th>Device</th>
+                                <th class="col-enrolled">Enrolled</th>
+                                <th class="col-ip">Device IP</th>
+                                <th class="col-photo">Photo</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+
+        <section class="geu-card geu-reconcile" id="geuReconcile" aria-label="Reconcile and sync to device">
+            <div class="geu-card-h">
+                <span class="geu-step">3</span>
+                <h3>Reconcile &amp; sync to terminal</h3>
+                <div class="geu-reconcile-actions">
+                    <button type="button" class="geu-btn" id="btnGeuValidateImport" @(canManageDevices ? "" : "disabled")>Validate import</button>
+                    <button type="button" class="geu-btn" id="btnGeuCompare" @(canManageDevices ? "" : "disabled")>Compare portal vs device</button>
+                    <button type="button" class="geu-btn geu-btn-danger" id="btnGeuDeleteExtra" @(canManageDevices ? "" : "disabled") hidden>Delete extra on device</button>
+                    <button type="button" class="geu-btn geu-btn-primary" id="btnGeuSyncStart" @(canManageDevices ? "" : "disabled")>Sync to device</button>
+                    <button type="button" class="geu-btn geu-btn-danger geu-hidden" id="btnGeuSyncCancel" hidden>Cancel job</button>
+                </div>
+            </div>
+            <div class="geu-card-b">
+                @if (!canManageDevices)
+                {
+                    <p class="geu-hint geu-hint-warn">Sync and compare actions require <strong>devices.manage</strong> permission.</p>
+                }
+                <div class="geu-reconcile-grid">
+                    <div class="geu-reconcile-panel">
+                        <h4>Import validation</h4>
+                        <p class="geu-sub">Queue or Excel → server-side rules; saves to Oracle registry when checked.</p>
+                        <label class="geu-check"><input type="checkbox" id="geuSaveRegistry" checked /> Save valid rows to registry (Oracle)</label>
+                        <div id="geuValidateSummary" class="geu-summary" hidden></div>
+                        <table id="geuValidateTable" class="geu-mini-table" hidden>
+                            <thead><tr><th>Line</th><th>NIC</th><th>Name</th><th>Status</th></tr></thead>
+                            <tbody id="geuValidateBody"></tbody>
+                        </table>
+                    </div>
+                    <div class="geu-reconcile-panel">
+                        <h4>Diff (portal ↔ device)</h4>
+                        <p class="geu-sub">Matched users show face / fingerprint status from HDCP.</p>
+                        <label class="geu-check"><input type="checkbox" id="geuCompareRegistry" /> Compare registry (Oracle) instead of attendance DB</label>
+                        <div class="geu-diff-stats" id="geuDiffStats" hidden>
+                            <span>Portal <b id="geuDiffPortal">0</b></span>
+                            <span>Device <b id="geuDiffDevice">0</b></span>
+                            <span>Matched <b id="geuDiffMatch">0</b></span>
+                            <span>Missing on device <b id="geuDiffMissing">0</b></span>
+                            <span>Extra on device <b id="geuDiffExtra">0</b></span>
+                        </div>
+                        <div class="geu-diff-columns" id="geuDiffColumns" hidden>
+                            <div><h5>Only on portal</h5><ul id="geuDiffPortalList" class="geu-diff-list"></ul></div>
+                            <div><h5>Only on device</h5><ul id="geuDiffDeviceList" class="geu-diff-list"></ul></div>
+                            <div><h5>On both</h5><ul id="geuDiffBothList" class="geu-diff-list"></ul></div>
+                        </div>
+                    </div>
+                    <div class="geu-reconcile-panel geu-sync-panel">
+                        <h4>Upload job</h4>
+                        <p class="geu-sub">HDCP upload → push fallback → <code>GetEmployee</code> verify. Live progress via SignalR.</p>
+                        <ul id="geuJobHistory" class="geu-diff-list geu-job-history" hidden></ul>
+                        <div id="geuSyncProgress" class="geu-sync-progress" hidden>
+                            <div class="geu-sync-bar"><div id="geuSyncBarFill"></div></div>
+                            <p id="geuSyncLog">—</p>
+                            <table class="geu-mini-table"><thead><tr><th>NIC</th><th>Upload</th><th>Verified</th><th>Method</th></tr></thead>
+                            <tbody id="geuSyncLines"></tbody></table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div class="geu-statusbar">
+        <span class="geu-sb-state" id="sbState"><i aria-hidden="true"></i><span id="sbText">Ready</span></span>
+        <div class="progress geu-progress" aria-hidden="true"><div class="geu-bar" id="geuBar"></div></div>
+        <div class="geu-sb-meta">
+            <span>Queued <b id="qCount">—</b></span>
+            <span>Batch <b id="bCount">35</b></span>
+            <span id="sbDev">@deviceShort · @(deviceLabel.Contains('(') ? deviceLabel[(deviceLabel.IndexOf('(') + 1)..].TrimEnd(')') : "")</span>
+        </div>
+    </div>
+</section>
+
+<input type="hidden" id="filterDeviceId" value="@ViewBag.DeviceId" />
+<script type="application/json" id="devicesJson">@Html.Raw(ViewBag.DevicesJson)</script>
+
+<div id="idQueueStat" class="geu-hidden" aria-hidden="true"><span class="enrolled-badge-text"></span></div>
+<div id="pullProgress" class="geu-hidden" aria-hidden="true"><span class="enrolled-badge-text"></span></div>
+<div id="pullProgressWrap" class="geu-hidden" hidden><div id="pullProgressFill"></div></div>
+<div id="idCardName" class="geu-hidden"></div>
+<div id="idCardNic" class="geu-hidden"></div>
+<div id="idCardRfid" class="geu-hidden"></div>
+<div id="idCardIssueDate" class="geu-hidden"></div>
+<button type="button" id="btnPull" class="geu-hidden" hidden></button>
+<button type="button" id="btnParseNics" class="geu-hidden" hidden></button>
+
+<div id="enrolledExportModal" class="enrolled-export-modal is-hidden" role="dialog" aria-modal="true" aria-labelledby="enrolledExportTitle">
+    <div class="enrolled-export-backdrop" data-enrolled-export-close></div>
+    <div class="enrolled-export-dialog">
+        <header class="enrolled-export-head">
+            <h3 id="enrolledExportTitle">Export to Excel</h3>
+            <button type="button" class="enrolled-export-close" data-enrolled-export-close aria-label="Close">&times;</button>
+        </header>
+        <div class="enrolled-export-body">
+            <fieldset class="enrolled-export-fieldset">
+                <legend>Rows to export</legend>
+                <label class="enrolled-export-radio"><input type="radio" name="exportScope" value="filtered" checked /> Current grid view</label>
+                <label class="enrolled-export-radio"><input type="radio" name="exportScope" value="all" /> All loaded rows</label>
+            </fieldset>
+            <fieldset class="enrolled-export-fieldset">
+                <legend>File format</legend>
+                <label class="enrolled-export-radio"><input type="radio" name="exportFormat" value="xlsx" checked /> Excel (.xlsx)</label>
+                <label class="enrolled-export-radio"><input type="radio" name="exportFormat" value="csv" /> CSV</label>
+            </fieldset>
+            <div class="enrolled-export-field">
+                <label for="exportFileName">File name</label>
+                <input type="text" id="exportFileName" class="enrolled-export-input" maxlength="120" />
+            </div>
+            <label class="enrolled-export-check enrolled-export-check--block">
+                <input type="checkbox" id="exportIncludeHeader" checked /> Include column headers
+            </label>
+            <fieldset class="enrolled-export-fieldset enrolled-export-columns">
+                <legend>Columns</legend>
+                <div class="enrolled-export-col-grid" id="exportColumnChecks"></div>
+            </fieldset>
+        </div>
+        <footer class="enrolled-export-foot">
+            <button type="button" data-enrolled-export-close>Cancel</button>
+            <button type="button" id="btnEnrolledExportRun">Download</button>
+        </footer>
+    </div>
+</div>
+@section Scripts {
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.0/signalr.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script src="~/js/device-enrolled-users.js" asp-append-version="true"></script>
+    <script src="~/js/device-enrolled-sync.js" asp-append-version="true"></script>
+}

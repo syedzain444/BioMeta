@@ -1,0 +1,110 @@
+@using BiometricDashboard.Core.Entities
+@{
+    ViewData["Title"] = "Enrollment hub";
+    ViewData["GateosEnrollmentHub"] = true;
+    Layout = "_DashboardLayout";
+    var band = ViewBag.PageBand as BiometricDashboard.Web.Models.PortalPageBandViewModel;
+    var deviceList = ViewBag.Devices as IReadOnlyList<BiometricDevice> ?? Array.Empty<BiometricDevice>();
+    var canSave = ViewBag.CanSave as bool? == true;
+}
+
+<section class="gateos-window deh-window" aria-label="Multi-device enrollment hub">
+    <div class="gateos-titlebar deh-titlebar">
+        <div class="gateos-lights" aria-hidden="true"><i></i><i></i><i></i></div>
+        <h2>Enrollment hub</h2>
+        <a class="deh-link" href="@Url.Action("Index", "DeviceEnrollmentSync")">Device sync →</a>
+        <a class="deh-link" href="@Url.Action("Index", "DeviceEnrolledUsers")">Device users →</a>
+    </div>
+
+    <div class="deh-content">
+        @if (band != null)
+        {
+            @await Html.PartialAsync("_PortalPageBand", band)
+        }
+
+        <div class="deh-grid">
+            <aside class="deh-card deh-devices" aria-label="Select devices">
+                <div class="deh-card-h"><h3>Devices</h3></div>
+                <div class="deh-card-b">
+                    <label class="deh-check-all">
+                        <input type="checkbox" id="dehChkAll" />
+                        All active devices
+                    </label>
+                    <div class="deh-dev-list" id="dehDevList">
+                        @foreach (var d in deviceList.OrderBy(x => x.DeviceName))
+                        {
+                            <label class="deh-dev-item">
+                                <input type="checkbox" class="deh-dev-chk" value="@d.DeviceId" data-name="@d.DeviceName" data-ip="@d.DeviceIp" @(d.IsActive ? "checked" : "") />
+                                <span><b>@d.DeviceName</b><small>@d.DeviceIp</small></span>
+                            </label>
+                        }
+                    </div>
+                </div>
+            </aside>
+
+            <div class="deh-main">
+                <div class="deh-toolbar">
+                    <button type="button" class="deh-btn deh-btn-primary" id="dehFetchSel">Fetch selected</button>
+                    <button type="button" class="deh-btn" id="dehFetchAll">Fetch all active</button>
+                    <button type="button" class="deh-btn" id="dehLoadStored">Load from portal DB</button>
+                    <button type="button" class="deh-btn deh-btn-cancel" id="dehCancel" hidden>Cancel</button>
+                    <button type="button" class="deh-btn" id="dehCompare" disabled>Compare by employee ID</button>
+                    @if (canSave)
+                    {
+                        <button type="button" class="deh-btn deh-btn-accent" id="dehSave" disabled>Save in portal</button>
+                    }
+                    <span class="deh-stat" id="dehStat" role="status"></span>
+                </div>
+
+                <div class="deh-compare-panel" id="dehComparePanel" hidden>
+                    <h4>Cross-device comparison</h4>
+                    <div class="deh-compare-stats" id="dehCompareStats"></div>
+                    <div class="deh-compare-tables">
+                        <div>
+                            <h5>On multiple devices (duplicates)</h5>
+                            <div class="deh-table-wrap">
+                                <table class="deh-table" id="dehTblShared"><thead><tr><th>Employee ID</th><th>Devices</th><th>Name conflict</th></tr></thead><tbody></tbody></table>
+                            </div>
+                        </div>
+                        <div>
+                            <h5>Only on one device</h5>
+                            <div class="deh-table-wrap">
+                                <table class="deh-table" id="dehTblUnique"><thead><tr><th>Device</th><th>Count</th><th>Sample IDs</th></tr></thead><tbody></tbody></table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <form id="dehSaveOpts" class="deh-save-opts" hidden>
+                    <label><input type="checkbox" id="dehAlsoRegistry" checked /> Also update master employee registry</label>
+                </form>
+
+                <div class="deh-table-wrap deh-main-table">
+                    <table class="deh-table" id="dehTable">
+                        <thead>
+                            <tr>
+                                <th>Device</th>
+                                <th>Employee ID</th>
+                                <th>Name</th>
+                                <th>Department</th>
+                                <th>Card</th>
+                                <th>Biometric</th>
+                                <th>Enrolled</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dehTbody">
+                            <tr id="dehEmpty">
+                                <td colspan="7" class="deh-empty">No rows yet — tick device(s) and click <strong>Fetch selected</strong>.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p class="deh-hint">Rows are keyed by <strong>device + employee ID</strong> in <code>BIO_DEVICE_ENROLLMENT</code> after Save. Run <code>013_device_enrollment_hub.sql</code> on Oracle once.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script src="~/js/device-enrollment-hub.js" asp-append-version="true"></script>
+}
